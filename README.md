@@ -1,34 +1,45 @@
-# Learning-computational-physics-from-scratch
-This repository contains some of the notes or implementation of some elementary review articles, text books, or lectures, which will hopefully help me get a first grasp of computational physics / computational quantum chemistry.
+# 1. Learning-computational-physics-from-scratch
+This repository contains some of the notes or implementation of some elementary review articles, text books, or lectures, which will hopefully help me get a first grasp of computational physics / quantum chemistry.
 
-# HF & post-HF method: Introduction
+<!-- # HF & post-HF method: Introduction -->
 Review paper [1] gives a nice introduction on some mordern day computational methods, and will be quoted here.
 
-## Problem set up
-The basic problem of quantum chemistry is to solve the many-body Schrodinger equation
+# 2. Problem set up
+The basic problem is to solve the many-body motion of electrons and nuclei / ions in matter (atoms / molecules / solids). 
+Multiple approximations are used to simplify the problem. 
+
+
+## 2.1. The non-relativistic approximation
+Ignoring relativistic effects, the problem is then to solve the non-relativistic Schrodinger equation
 $$H|\Psi\rangle=E|\Psi\rangle.$$
-Relativistic effects are omitted (*the first approximation*). The Hamiltonian should, in principle, include the electrons and the nuclei. However, as *a second approximation* (The Born-Oppenheimer approximation), one often treat the total wave function as a direct product of electron wave function and nuclear wave function: $|\Psi\rangle = |\psi_e\rangle|\psi_n\rangle$. Then the Schrodinger equation is also seperated. We may now focus on the electron part, and treat the nuclear coordinates as fixed constants:
-$$H_e=-\frac{1}{2}\sum_{i=1}^{N_e}\nabla_I^2 + \sum_{i<j}^{N_e}\frac{1}{|\boldsymbol{x}_i-\boldsymbol{x}_j|}-\sum_{I=1}^{N_{nucl}} \sum_{j=1}^{N_e} \frac{Z_I}{|\boldsymbol{X}_I-\boldsymbol{x_j}|},$$
-where $\boldsymbol{X}_I$ and $\boldsymbol{x}_j$ are the nuclear and electronic coordinates.
+with $H=T+V$. The kinetic term is
+$$T=-\sum_{i=1}^{N_e}\frac{1}{2m_e}\nabla_i^2-\sum_{I=1}^{N_n}\frac{1}{2m_n}\nabla_I^2\equiv T_e+T_n.$$
+where $N_e$, $N_n$, $m_e$, $m_n$ the number and mass of electrons and nuclei / ions.
+The potential term is
+$$\begin{aligned}V&=
+\frac{1}{4\pi\epsilon_0}\left[\sum_{i\neq j}^{N_e}\frac{e^2}{|\boldsymbol{r}_i-\boldsymbol{r}_j|}+\sum_{I\neq J}^{N_n}\frac{Z_IZ_je^2}{|\boldsymbol{R}_I-\boldsymbol{R}_J|}-\sum_{I=1}^{N_n}\sum_{i=1}^{N_e}\frac{Z_Ie^2}{|\boldsymbol{R}_I\boldsymbol{r}_i|}\right]\\
+&\equiv V_{ee}+V_{nn}+V_{en}
+\end{aligned}$$
+where $\boldsymbol{r}_i$, $\boldsymbol{R}_I$ the coordinates of electrons and ions, and $Z_i$ the atomic number.
 
+## 2.2. The Born-Oppenheimer (BO) approximation
+The first step (the clamped-nuclei approx) of BO approximation is to approximate the state (including the electrons and irons) as a direct product:
+$$\Psi(\{\boldsymbol{x}\},\{\boldsymbol{R}\})=\psi_e(\{\boldsymbol{x}\};\{\boldsymbol{R}\}) \psi_n(\{\boldsymbol{R}\}),$$
+where the general coordinate $\boldsymbol{x}$ includes both the space coordinate and the spin coordinate.
 
-## The variational principle
-It seems that a great number of numerical methods are based on the quantum mechanics variational principle, which states that the expected energy of any trial wave function $|\tilde{\psi}\rangle$ will be no less than the true ground state energy:
-$$\frac{\langle \tilde{\psi}|H|\tilde{\psi}\rangle}{\langle \tilde{\psi}|\tilde{\psi}\rangle}.$$
-Thus, one may try to find a subspace of the Hilbert space, and try to minimize the energy integral in that subspace, then a good approximation of the ground state energy and wave function will hopefully been found. The goal is then to s
+The second step is to notice that electrons move "faster" then the nuclei, so that the nuclei can be considered still when solving the movement of electrons (the adiabatic approx). In other words, the nuclei positions $X_I$ are treated as parameters, and the electron wave function is solved:
+$$[T_e+V_{ee}+V_{en}]\psi_e=E_e\psi_e.$$
+The solved eigen values $E_e(\{\boldsymbol{R}\})$ depend on the nuclear positions, and are further used to solve the nuclear motion:
+$$[T_n+E_e+V_{nn}]\psi_n=E\psi_n.$$
+The first part is called the *electronic structure calculation* [1] and will be focused here.
 
-## Hatree-Fock approximation
-The Hartree-Fock approximation (the *third approximation*) says we may approximate the total electron wave function as a Slater determinant:
-$$|\psi_e\rangle \approx |\psi_{HF}\rangle = \frac{1}{\sqrt{N_e!}} \left| \begin{matrix}\phi_1(\boldsymbol{x}_1) &\phi_1(\boldsymbol{x}_2) &\dots &\phi_1(\boldsymbol{x}_{N_3})\\
-\phi_2(\boldsymbol{x}_1) &\phi_2(\boldsymbol{x}_2) &\dots &\phi_2(\boldsymbol{x}_{N_3})\\
-\dots &\dots &\dots & \dots\\
-\phi_{N_e}(\boldsymbol{x}_1) &\phi_{N_e}(\boldsymbol{x}_2) &\dots &\phi_{N_e}(\boldsymbol{x}_{N_3})\\
-\end{matrix} \right|,$$
-where $\phi_{i}$ is called the molecular orbitals (MO), which is yet to be determined through the variational method.
+In summary, the task of electronic structure calculation (within the BO approx) is to calculate the eigen value / eigen states of the electronic Hamiltonian (in atomic units, $e=1$, $m_e=1$, $4\pi\epsilon_0=1$)
+$$H_e=-\frac{1}{2}\sum_{i=1}^{N_e}\nabla_i^2+\sum_{i\neq j}^{N_e}\frac{e^2}{|\boldsymbol{r}_i-\boldsymbol{r}_j|}-\sum_{I=1}^{N_n}\sum_{i=1}^{N_e}\frac{Z_Ie^2}{|\boldsymbol{R}_I-\boldsymbol{r}_i|},$$
+with $\boldsymbol{R}_I$ treated as fixed parameters.
 
-Minimizing the energy intergral with HF wave functions, one gets the HF equation
-$$F|\phi_j\rangle = \epsilon_j |\phi_j\rangle,$$
-with $F= h + \sum_{i=1}^{N_e}(J_i-K_i)$, where $J_i$ and $K_i$ depends on $\phi_j$, indicating the columb energy and exchange correlation energy.
-
-# Reference
+# 3. The variational principle
+A great number of numerical methods are based on the quantum mechanics variational principle, which states that the expected energy of any trial wave function $|\tilde{\psi}\rangle$ will be no less than the true ground state energy:
+$$E=\frac{\langle \tilde{\psi}|H|\tilde{\psi}\rangle}{\langle \tilde{\psi}|\tilde{\psi}\rangle}\geq E_{gs}.$$
+Thus, one may try to find a subspace of the Hilbert space, and try to minimize the energy integral in that subspace, then a good approximation of the ground state energy and wave function will hopefully been found.
+# 4. Reference
 [1] Y. Shikano, H. C. Watanabe, K. M. Nakanishi, and Y. Ohnishi, Post-Hartree–Fock Method in Quantum Chemistry for Quantum Computer, Eur. Phys. J. Spec. Top. 230, 1037 (2021).
