@@ -19,7 +19,7 @@ The potential term is
 $$V=V_ {ee}+V_ {nn}+V_ {en}$$
 with
 $$V_ {ee}=\frac{1}{4\pi\epsilon_ 0}\sum_ {i\neq j}^{N_ e}\frac{e^2}{|\boldsymbol{r}_ i-\boldsymbol{r}_ j|},$$
-$$V_ {nn}=\frac{1}{4\pi\epsilon_ 0}\sum_ {I\neq J}^{N_ n}\frac{Z_ IZ_ je^2}{|\boldsymbol{R}_ I-\boldsymbol{R}_ J|}$$
+$$V_ {nn}=\frac{1}{4\pi\epsilon_ 0}\sum_ {I\neq J}^{N_ n}\frac{Z_ IZ_ Je^2}{|\boldsymbol{R}_ I-\boldsymbol{R}_ J|}$$
 and
 $$V_ {en}=-\frac{1}{4\pi\epsilon_ 0}\sum_ {I=1}^{N_ n}\sum_ {i=1}^{N_ e}\frac{Z_ Ie^2}{|\boldsymbol{R}_ I\boldsymbol{r}_ i|}.$$
 where $\boldsymbol{r}_ i$, $\boldsymbol{R}_ I$ the coordinates of electrons and ions, and $Z_ i$ the atomic number.
