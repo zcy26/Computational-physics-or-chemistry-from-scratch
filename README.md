@@ -39,9 +39,13 @@ In summary, the task of electronic structure calculation (within the BO approx) 
 $$H_ e=-\frac{1}{2}\sum_ {i=1}^{N_ e}\nabla_ i^2+\sum_ {i\neq j}^{N_ e}\frac{e^2}{|\boldsymbol{r}_ i-\boldsymbol{r}_ j|}-\sum_ {I=1}^{N_ n}\sum_ {i=1}^{N_ e}\frac{Z_ Ie^2}{|\boldsymbol{R}_ I-\boldsymbol{r}_ i|},$$
 with $\boldsymbol{R}_ I$ treated as fixed parameters.
 
-# 3. The variational principle
-A great number of numerical methods are based on the quantum mechanics variational principle, which states that the expected energy of any trial wave function $|\tilde{\psi}\rangle$ will be no less than the true ground state energy:
+# 3. Wave function methods: The variational principle
+A great number of numerical methods try to solve the wave function of the electron structure problem. They are based on the quantum mechanics variational principle, which states that the expected energy of any trial wave function $|\tilde{\psi}\rangle$ will be no less than the true ground state energy:
 $$E=\frac{\langle \tilde{\psi}|H|\tilde{\psi}\rangle}{\langle \tilde{\psi}|\tilde{\psi}\rangle}\geq E_ {gs}.$$
 Thus, one may try to find a subspace of the Hilbert space, and try to minimize the energy integral in that subspace, then a good approximation of the ground state energy and wave function will hopefully been found.
-# 4. Reference
+
+# 4. Desntiy Functional Theory
+Density functional theory, in contrast to the wave function methods, focus on the electron density of the system.
+
+# 5. Reference
 [1] Y. Shikano, H. C. Watanabe, K. M. Nakanishi, and Y. Ohnishi, Post-Hartree–Fock Method in Quantum Chemistry for Quantum Computer, Eur. Phys. J. Spec. Top. 230, 1037 (2021).
