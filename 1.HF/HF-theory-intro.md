@@ -21,7 +21,7 @@ $$J_i[\psi]f(x)=\left(\int\frac{|\psi_j(x')|^2}{|\boldsymbol{r}-\boldsymbol{r}'|
 $$K_j[\psi]f(x)=\left(\int\frac{\psi_j(x')f(x')}{|\boldsymbol{r}-\boldsymbol{r}'|} \mathrm{d}x'\right)\psi_j(x).$$ Note that $\int \mathrm{d}x=\sum_{\sigma} \int \mathrm{d}\boldsymbol{r}$ includes both spin and space coordinate.
 
 The HF equation(s) is actually an eigen value problem. But the Fock operator itself depends on the wave functions. Therefore, it should be solved in a iterative self-consistent manner. After solving the orbitals, the total energy can then be evluated:
-$$E=\angle H \rangle = \sum_i \epsilon_i - \frac{1}{2}\sum_{i,j}(J_{ij}-K_{ij}).$$
+$$E=\langle H \rangle = \sum_i \epsilon_i - \frac{1}{2}\sum_{i,j}(J_{ij}-K_{ij}).$$
 
 ## 2.2. Interpretation of the HF equations
 
