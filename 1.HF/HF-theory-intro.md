@@ -20,11 +20,12 @@ $$h=-\frac{1}{2}\nabla^2-\sum_{I=1}^{N_n}\frac{Z_Ie^2}{|\boldsymbol{R}_I-\boldsy
 $$J_i[\psi]f(x)=\left(\int\frac{|\psi_j(x')|^2}{|\boldsymbol{r}-\boldsymbol{r}'|}\mathrm{d}x'\right)f(x),$$ and the exchange operators
 $$K_j[\psi]f(x)=\left(\int\frac{\psi_j(x')f(x')}{|\boldsymbol{r}-\boldsymbol{r}'|} \mathrm{d}x'\right)\psi_j(x).$$ Note that $\int \mathrm{d}x=\sum_{\sigma} \int \mathrm{d}\boldsymbol{r}$ includes both spin and space coordinate.
 
-The HF equation(s) is actually an eigen value problem. But the Fock operator itself depends on the wave functions. Therefore, it should be solved in a iterative self-consistent manner.
+The HF equation(s) is actually an eigen value problem. But the Fock operator itself depends on the wave functions. Therefore, it should be solved in a iterative self-consistent manner. After solving the orbitals, the total energy can then be evluated:
+$$E=\angle H \rangle = \sum_i \epsilon_i - \frac{1}{2}\sum_{i,j}(J_{ij}-K_{ij}).$$
 
 ## 2.2. Interpretation of the HF equations
 
-Each function $\psi_j(x)$ can be interpreted as a single-electron orbit. Under this interpretation, the Fock equation can be interpreted as the equation of motion (the Schrodinger equation) of a single electron moving in the mean field of other electrons. The coulomb operator $J_i[\psi]$ is actually the mean electric field of atoms.
+Each function $\psi_j(x)$ can be interpreted as a single-electron orbit. Under this interpretation, the Fock equation can be interpreted as the equation of motion (the Schrodinger equation) of a single electron moving in the mean field of other electrons. The coulomb operator $J_i[\psi]$ is actually the mean electric field of atoms. Furthermore, if we assume the orbitals are unchanged with the electron on the kth orbital removed, one can show that the energy change, i.e., the ionzization energy is $-\epsilon_k$ (the Koopmans' Theorem [2]), which agian indicates the interpretation of single-electron orbital of the HF method.
 
 One of the most significant flaw of HF theory is that some coorelations are neglected due to the mean-field theory. (See the discussion on the ["electron correlation" page](https://en.wikipedia.org/wiki/Electron_correlation) and ["Hartree-Fock method" page](https://en.wikipedia.org/wiki/Hartree%E2%80%93Fock_method) on Wikipedia.) Mathematically speaking, the coorelation of two random variables $x_1$ and $x_2$ means their joint distribution is not a product of marginal distribution:
 $$\rho(x_1,x_2)\neq \rho(x_1)\rho(x_2).$$ The Hartree Fock method includes some, but not all correlations.
@@ -57,6 +58,9 @@ $$\rho(\boldsymbol{r},\boldsymbol{r}',\sigma\neq \sigma')=\rho(\boldsymbol{r},\s
 
 In addition to UHF, there is also restricted HF (RHF) method, where $N_A=N_B$ is imposed. Furthermore, the space parts of spin-up state and spin-down state are chosen to be the same. More explicitly, we have $\psi_{i}=\phi_i\alpha$ with $i=1,\dots,N/2$ and $\psi_i=\phi_{i-N/2}\beta$ with $i=N/2+1,\dots,N$.
 RHF can only be used for systems with even number of electrons, and there is no spin-contamination. In a rough sense, it is convenient to interpret the electron configuration as electrons of different spins filling into fixed spacial orbits (molecular orbitals, MO). If all MOs are doubly occupied or empty, the configuration is called closed-shell, where RHF methods can be used. Otherwise the configuration is called open-shell, where UHF has to be used, or another restricted open-shell HF (ROHF) method can be applied.
+
+Finally, we quote the total energy of RHF method here [2]:
+$$E=2\sum_{i=1}^{N_e/2}\epsilon_i-\sum_{i,j}^{N_e/2}\left(2\langle\phi_i\phi_j|\frac{1}{r}|\phi_i\phi_j\rangle - \langle\phi_i\phi_j|\frac{1}{r}|\phi_j\phi_i\rangle \right).$$
 
 ## 2.4. Solving the HF equations
 ### 2.4.1. Self-consistent field (SCF) calculation
