@@ -1,5 +1,5 @@
 # 1. Learning-computational-physics-from-scratch
-This repository contains some of the notes or implementation of some elementary review articles, text books, or lectures, which will hopefully help me get a first grasp of computational physics / quantum chemistry.
+This repository contains some of the notes or implementation of some elementary review articles, text books, or lectures, which will hopefully help me get a first grasp of computational physics / quantum chemistry. I will be more or less following the content of this [lecture series on quantum computational chemistry (in Chinese)](https://www.koushare.com/lives/room/700402).
 
 *It seems that Github cannot display some formulae correctly.*
 
