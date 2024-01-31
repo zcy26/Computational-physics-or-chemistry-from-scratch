@@ -1,8 +1,10 @@
 # 1. Learning-computational-physics-from-scratch
 This repository contains some of the notes or implementation of some elementary review articles, text books, or lectures, which will hopefully help me get a first grasp of computational physics / quantum chemistry.
 
+*It seems that Github cannot display some formulae correctly.*
+
 <!-- # HF & post-HF method: Introduction -->
-Review paper [1] gives a nice introduction on some mordern day computational methods, and will be quoted here.
+Review paper [1] gives a nice introduction on some mordern day computational methods, and will be quoted in this readme.
 
 # 2. Problem set up
 The basic problem is to solve the many-body motion of electrons and nuclei / ions in matter (atoms / molecules / solids). 
