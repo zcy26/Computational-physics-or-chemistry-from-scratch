@@ -108,10 +108,10 @@ Some errors are introduced since only a finite number of basis can be used in pr
 5. Basis-set approx.
 
 
-# Intro to post-HF method
+# 3. Intro to post-HF method
 In the Hartree approx, the trail wave functon is a direct product and no correlation is included. In the HF approx, the determinant trial function lead to the Fermi correlation in the HF equations. Therefore, it is natural to design a better trial function that may hopefully include other correlations. A natrual trial is to go from a single slater determinant to a linear combination of determinants.
 
-## The Full Configurational Interaction (FCI) method
+## 3.1. The Full Configurational Interaction (FCI) method
 The FCI method depends on the basis set approximation. If $M$ basis functions are used, one will get $M$ orbits from the HF calculation. Generally speaking, the lowest $N_e$ orbits (occupied orbits) are used to form a slater determinant $\Psi_0$ as the result of the HF calculation (if no restriction is imposed on HF). There are then a great number of orbits unused (called the virtual orbits). In configuration interaction method, these virtual orbits are utilized to create different slater determinats. For example, we may replace the orbit $\psi_1$ with $\psi_{N_e+1}$, and get another determinant $\Psi_1^{N_e+1}$. We may also replace two orbits and get determinants like $\Psi_{1,2}^{N_e+1,N_e+2}$. The configuration interaction method is to set the trial wave function as the linear combination of the HF function and these "excited states"[1]:
 $$\Psi_{CI}=\Psi_0\left(1+\sum_{m=1}^{n}\hat{C}_m\right)\Psi_0,$$
 where $\Psi_0$ is the HF wave function (the "ground state"), and $\hat{C}_m$ is the m-electron excitation operator, which essentially means the linear combination of all possible ways of exciting m electrons to excited states:
@@ -122,7 +122,7 @@ The conbination coefficients are determined through the variational principle. W
 
 
 
-# 3. Reference
+# 4. Reference
 [1] Y. Shikano, H. C. Watanabe, K. M. Nakanishi, and Y. Ohnishi, Post-Hartree–Fock Method in Quantum Chemistry for Quantum Computer, Eur. Phys. J. Spec. Top. 230, 1037 (2021).
 
 [2] P. Echenique and J. L. Alonso, A Mathematical and Computational Review of Hartree-Fock SCF Methods in Quantum Chemistry, Molecular Physics 105, 3057 (2007).
