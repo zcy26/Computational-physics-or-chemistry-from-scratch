@@ -63,13 +63,14 @@ $D(\boldsymbol{x})$ is a slater determinant from HF or DFT calculation. $J(\bold
 
 ## 3.3. A List of Major Techniques in VMC
 
-Despite its simple logic, a great number of techniques can be applied to optimize the speed and precision of VMC.
+Despite simple logic, a great number of techniques can be applied to optimize the speed and precision of VMC.
 The following list is mostly summarized from review [2] and is not be exhaustive. Many of these techniques also applies to other QMC methods.
 
 1. Wave function ansatz:
    1. Seperation of spins. Spin-up and Spin-down electrons can be treated as distinguishable, and the determinant can be replaced by $D^{\uparrow}(\boldsymbol{r}_1,\dots,\boldsymbol{r}_{N_{\uparrow}})D^{\downarrow}(\boldsymbol{r}_{N_{\uparrow}+1},\dots,\boldsymbol{r}_{N_e})$. It can be shown that this simplification will not affect the average value of a spin-independent observable.
    2. Backflow: The electron coordinates $\boldsymbol{r}_i$ in the Slater determinant can be replaced by the quasiparticle coordinates $\bar{\boldsymbol{r}}_i=\boldsymbol{r}_i+\sum_{j\neq i}^{N_e}\eta(r_{ij})(\boldsymbol{r}_i-\boldsymbol{r}_j)$, where $\eta$ is determined variationally. It's found that the backflow function lowers the VMC / DMC energy in 3d uniform electron gas.
    3. The cusp condition: It is motivated from the H atom, where the diverging kinetic energy and the columb energy cancels as the electron coinsides with the nuclear, leading to a cusp in the 1s orbital. Similarly, some additional constraints are imposed to the function ansatz to ensure the cancelling of diverging energy. See [2] or [3] for more details.
+   4. In recent years, neural networks are utilized to represent the wave function, leading to neural network quantum Monte Carlo (NNQMC), briefly introduced in lecture [1].
 2. Some physical consideration:
    1. Pseudopotential: In many cases, the valance electrons (electrons at the outmost "shell") mostly determines the property we are interested in. Therefore, the core electrons can be modeled as a shieding effect to the nuclear potential, leading to the effective pseudopotentials. The core electrons can then be elinimated from the Schrondinger equation.
    2. Periodic systems: Modeling periodic systems are more subtle than finite systems. See [2] or [4] for details.
