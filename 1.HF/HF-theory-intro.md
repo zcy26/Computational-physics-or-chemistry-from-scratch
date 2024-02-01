@@ -12,7 +12,7 @@ The Hartree-Fock approximation approximates the total electron wave function as 
 \psi_ {N_ e}(x_ 1) &\psi_ {N_ e}(x_ 2) &\dots &\psi_ {N_ e}(x_ {N_ 3})\\
 \end{matrix} \right|,$$ -->
 $$|\psi_ e\rangle \approx |\Psi_ {HF}\rangle = \frac{1}{\sqrt{N_ e!}}\det \boldsymbol{D}$$
-where $D_ {ij}=\psi_ i(x_ j)$, $i=1,\dots,N_ e$ is the "Slater matrix", and the $\psi_ {i}$'s are yet to be determined through the variational method. Note that $x$ is a general coordinate. In a more explicit form, each wave function contains a spin up part and a spin down part:
+where $D_ {ij}=\psi_ i(x_ j)$, $i=1,\dots,N_ e$ is the "Slater matrix", and the single electron orbitals $\psi_ {i}$'s are yet to be determined through the variational method. Note that $x$ is a general coordinate. In a more explicit form, each wave function contains a spin up part and a spin down part:
 $$\psi(x)=\psi(\boldsymbol{r},\sigma)=\phi^{\alpha}(\boldsymbol{r})\alpha(\sigma) + \phi^{\beta}(\boldsymbol{r})\beta(\sigma),$$
 where $\alpha(\sigma)=\delta_ {\sigma,\frac{1}{2}}$ and $\beta(\sigma)=\delta_ {\sigma,\frac{-1}{2}}$.
 
