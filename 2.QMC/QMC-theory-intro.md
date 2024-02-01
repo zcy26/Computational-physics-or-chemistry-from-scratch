@@ -64,7 +64,7 @@ $D(\boldsymbol{x})$ is a slater determinant from HF or DFT calculation. $J(\bold
 ## 3.3. A List of Major Techniques in VMC
 
 Despite simple logic, a great number of techniques can be applied to optimize the speed and precision of VMC.
-The following list is mostly summarized from review [2] and is not be exhaustive. Many of these techniques also applies to other QMC methods.
+The following list is mostly summarized from review [2] and is not exhaustive. Many of these techniques also applies to other QMC methods.
 
 1. Wave function ansatz:
    1. Seperation of spins. Spin-up and Spin-down electrons can be treated as distinguishable, and the determinant can be replaced by $D^{\uparrow}(\boldsymbol{r}_1,\dots,\boldsymbol{r}_{N_{\uparrow}})D^{\downarrow}(\boldsymbol{r}_{N_{\uparrow}+1},\dots,\boldsymbol{r}_{N_e})$. It can be shown that this simplification will not affect the average value of a spin-independent observable.
