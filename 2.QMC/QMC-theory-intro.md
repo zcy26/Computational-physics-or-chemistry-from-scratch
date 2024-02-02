@@ -105,16 +105,63 @@ $$\Phi(\boldsymbol{R},t+\tau)=\int G(\boldsymbol{R}'\leftarrow \boldsymbol{R},\t
 where the Green's function $G(\boldsymbol{R}'\leftarrow \boldsymbol{R},\tau)=\langle \boldsymbol{R}'|U(\tau)|\boldsymbol{R}\rangle$ is the matrix element. The Green function is often split into two parts: the kinetic part and the potential part.
 
 The kinetic part corresponds to a diffusion equation $\partial_t \Phi = (1/2)\sum_{i=1}^{N_e}\nabla_i^2\Phi$. The Green's function can be analytically solved as
-$$G_d(\boldsymbol{R}\leftarrow \boldsymbol{R}',\tau)=(2\pi\tau)^{-3/2}\exp\left[\frac{-|\boldsymbol{R}-\boldsymbol{R}'|^2}{2\tau} \right],$$
+$$G_d(\boldsymbol{R}\leftarrow \boldsymbol{R}',\tau)=(2\pi\tau)^{-3N_e/2}\exp\left[\frac{-|\boldsymbol{R}-\boldsymbol{R}'|^2}{2\tau} \right],$$
 i.e., a Gaussian. If the wave function $\Phi$ is viewed as the number density of walkers, this diffusion equation can then be simulated by random walk (a brownian motion) discussed earlier. The Green's function can be interpreted as the probability distribution of immediate displacement of a walker at time $\tau$. Were there no potential energy, we can simply put a lot of walkers in the high-dimensional configuration space, discretize time, and sample random walks. The final distribution of the walker then gives the function $\Phi$, up to a normalization constant.
 
 If potential energy exists, we can use the Trotter-Suzuki formula $e^{-\tau(\hat{A}+\hat{B})}=e^{-\tau\hat{B}/2}e^{\tau\hat{A}}e^{-\tau\hat{B}/2}+O(\tau^3)$ to approximately expand the whole evolution operator, resulting in the approximate Green's function
 $$G(\boldsymbol{R}\leftarrow \boldsymbol{R}',\tau)\approx G_dP$$
 where $G_d$ is the Gaussian of the kinetic part and the
 $$P=\exp\{-\tau[V(\boldsymbol{R})+V(\boldsymbol{R}')-2E_T]/2\}.$$
-The $P$ factor can be implemented with the branching algorithm. At each time step, a move is proposed with distribution $G_d$. Then, the walker is killed (i.e., eliminated) or copied for several times based on $P$: If $P<1$, the walker is killed with probability $1-P$; if $1\leq P < 2$, the walker survivies, and another walker is created with probability $P-1$... In short, the number of walkers going into the next step is $M=\lfloor P + \eta \rfloor$, with $\eta$ a random number uniformly distributed in $[0,1]$. The shift energy $E_T$ will occasionally be varied to keep the number of walkers arround 100 or 1000.
+The renormalization factor $P$ can be implemented with the branching algorithm. At each time step, a move is proposed with distribution $G_d$. Then, the walker is killed (i.e., eliminated) or copied for several times based on $P$: If $P<1$, the walker is killed with probability $1-P$; if $1\leq P < 2$, the walker survivies, and another walker is created with probability $P-1$... In short, the number of walkers going into the next step is $M=\lfloor P + \eta \rfloor$, with $\eta$ a random number uniformly distributed in $[0,1]$. The shift energy $E_T$ will occasionally be varied to keep the number of walkers arround 100 or 1000.
 
 Promising as DMC may seem, a critical approximation (fixed-node approximation) and an important improvement (importance sampling) should be made to put DMC really into use.
+
+## Fixed-Node Approximation
+To simulate the real-time Schrodinger equation through walkers, it is necessary that the solution $\Phi$ is positive, so that it can be interpreted as a number density. However, in the case of Fermion with ansisymmetry, the wave function $\Phi$ has positive and negative regions sperated by nodal surfaces (places where $\Phi=0$). A Naive remedy is to assign signs to each walkers, but such method turns out to introduce unbearable noise. This is called a Fermion-sign problem. Some results have been made for small systems without approximation, but the introducig the fixed-node approximation is the probably the most popular choice.
+
+The idea of fixed-node approxiamtion is to introduce a trial wave function $\Psi_T$, and treat the nodal surface of $\Psi_T$ as walls. These walls partition the whole space into several pockets. DMC is then run in these pockets.
+
+Consider, for example, a one-dimensional inifinte well. To impose the boundary condition of the wall in DMC, one can simply eliminate the walkers if they cross the wall, because the factor $P$ becomes 0 when $V=\infty$. The same method is used in fixed-node approximation: after each move, if the walker cross the nodal surface of $\Psi_T$, eliminate it (or reject the move if importance sampling is used, explained below).
+
+The fixed-node DMC then calculate the exact ground state with a given nodal surface. It thus introduce a systemetical error dependent on the choice of nodal surface. It can be proved that the energy gained from this approximation is no less than the true ground state energy.
+
+
+## Importrance Sampling
+In calculation, the factor $P$ may vary drastically or even diverge, making DMC inefficient. It can be improved through the importance sampling transformation. Introduce a "guiding" or "trial" wave function $\Psi_T(\boldsymbol{R})$, and perform the change-of-variable $f(\boldsymbol{R},t)=\Phi(\boldsymbol{R},t)\Psi_T(\boldsymbol{R})$. The imaginary-time Schrodinger equation than becomes
+$$-\frac{\partial f}{\partial t} = -\frac{1}{2}\nabla^2 f + \nabla \cdot [\boldsymbol{v}_D(\boldsymbol{R})f]+(E_L(\boldsymbol{R})-E_T)f,$$
+where $\boldsymbol{v}_D(\boldsymbol{R}) = \nabla \ln|\Psi_T(\boldsymbol{R})|=\Psi_T^{-1}\nabla \Psi_T$ is called the drift velocity, and $E_L(\boldsymbol{R})=\Psi_T^{-1}\hat{H}\Psi_T$ is the local energy. Note that both $\boldsymbol{v}_D$ and $E_L$ are konwn functions because $\Psi_T$ is known.
+
+The function of $f$ can similarly be solved through Green's function $f(\boldsymbol{R},t+\tau)=\int\tilde{G}(\boldsymbol{R}\leftarrow\boldsymbol{R}',\tau)f(\boldsymbol{R}',t)\mathrm{d}\boldsymbol{R}'$, where $\tilde{G}$ is related to the original Green's function $G$ (for $\Phi$) as $\tilde{G}=\Psi_T(\boldsymbol{R})G(\boldsymbol{R}\leftarrow\boldsymbol{R}',\tau)\Psi_T^{-1}(\boldsymbol{R}')$. Similarly, $\tilde{G}$ can be approximately decomposed into a Gaussian
+$$G_d(\boldsymbol{R}\leftarrow\boldsymbol{R}',\tau)=(2\pi\tau)^{-3N_e/2}\exp\left\{-\frac{[\boldsymbol{R}-\boldsymbol{R'}-\tau\boldsymbol{v}_D(\boldsymbol{R}')]^2}{2\tau} \right\}$$
+and a renormalization factor
+$$G_b(\boldsymbol{R}\leftarrow\boldsymbol{R}',\tau)=\exp\{-\tau[E_L(\boldsymbol{R})+E_L(\boldsymbol{R})'-2E_T]/2 \}$$
+as $G\approx G_d G_b$.
+
+Comparing the Green function with importance sampling and the original Green's function, the potential is replaced by local energy, and a drift term $\boldsymbol{v}_D$ is introduced. The drift velocity means each walker should be drfited by $\tau\boldsymbol{v}_D$ before sampling a Gaussian step. Furthermore, when $\Psi_T\to0$, i.e., near the nodal surface, $\boldsymbol{v}_D\to\infty$, which, in the theoretical case of $\tau\to 0$, will carry the walker away and natrually impose the fixed-node condition. However, in real computation, $\tau$ is finite and walkers may actually cross the nodal surface in some cases. Thus, to impose the nodal surface boundary, one can remove the walker crossing the surfaces as usual. Another choice with smaller error in practice is to reject the move and keep the walker where it was.
+
+At the nodal surface or singularity points where quantities such as $\boldsymbol{v}_D$ diverges, the approximation $G\approx G_dG_b$ is poor. An acceptance / rejection step can be introduced to improve the Green's function. Since $\tilde{G}(\boldsymbol{R}\leftarrow \boldsymbol{R}',\tau)=\Psi_T(\boldsymbol{R})G(\boldsymbol{R}\leftarrow\boldsymbol{R}',\tau)\Psi_T^{-1}(\boldsymbol{R}')$ and $G$ is symmetric about $\boldsymbol{R}$ and $\boldsymbol{R}'$, the exact $\tilde{G}$ satisfies the detailed balance
+$$\tilde{G}(\boldsymbol{R}\leftarrow \boldsymbol{R}',\tau)\Psi_T(\boldsymbol{R}')^2=\tilde{G}(\boldsymbol{R}'\leftarrow\boldsymbol{R},\tau)\Psi_T(\boldsymbol{R})^2.$$
+To impose this detailed balance, we may add an acceptance step after the move with acceptance probability
+$$\begin{aligned}p_{acc}(\boldsymbol{R}\leftarrow\boldsymbol{R}')&=\min[1,\frac{G_dG_b(\boldsymbol{R}'\leftarrow \boldsymbol{R},\tau)|\Psi_T(\boldsymbol{R})|^2}{G_dG_b(\boldsymbol{R}\leftarrow \boldsymbol{R}',\tau)|\Psi_T(\boldsymbol{R}')|^2}]\\
+&=\min[1,\frac{G_d(\boldsymbol{R}'\leftarrow\boldsymbol{R},\tau)\Psi_T(\boldsymbol{R})^2}{G_d(\boldsymbol{R}\leftarrow\boldsymbol{R}',\tau)\Psi_T(\boldsymbol{R'})^2}]\end{aligned}.$$
+
+## DMC Summary
+The routine of DMC is clearly summarized in [2]. I quote it here.
+
+>1. Pick a trial function $\Psi_T$, from e.g., VMC. Scatter $N_c$ (100-500, or 1000) walkers in the configuration space with distribution $\Psi_T^2$.
+>2. Evaluate the drift velocith $\boldsymbol{v}_D$ for each walker.
+>3. Propagate each walker for a time step $\tau$ and move it to a new position $\boldsymbol{R}=\boldsymbol{R}+\chi+\tau\boldsymbol{v}_D(\boldsymbol{R}')$, where $\chi$ is a $3N_e$ dim Gaussian with variance $\tau$ and zero mean.
+>4. If the walker cross the nodal surface, i.e., if $\Psi_T(\boldsymbol{R})\Psi_T(\boldsymbol{R}')<0$, reject the move and the walker stays at $\boldsymbol{R}$.
+>5. With probability $p_{acc}$, accept the move. If the move is rejected, the walker stays at $\boldsymbol{R}$.
+>6. Cauculate the number of copies $M=\lfloor\eta+G_b \rfloor$, where $\eta$ is a random variable uniformly distributed in [0,1].
+>7. Calculate the quantity of interest from the walkers, e.g., the energy.
+>8. Repeat 2-7 until error bars for the interested quantities are small enough. $E_T$ is occasionally adjusted to keep the population of walkers through, e.g., $E_T\leftarrow E_T-C_E\ln(M_{act}/M_{ave})$, where $M_{act}$ is the actual number of walkers and $M_{ave}$ is the desired number. $C_E$ is often chosen to rebalance the number of walkers in 10 to 50 steps. (There are also more sophisticated method for $E_T$.)
+
+
+
+# Other Monte Carlo Methods
+Auxilary-Field QMC (AFQMC) and path-integral QMC are also used for many-body systems.
+
 
 # 5. Reference
 [1]陈基. 量子蒙特卡洛算法[OL]. (2023-12-15) 合肥. https://www.koushare.com/video/videodetail/73856
