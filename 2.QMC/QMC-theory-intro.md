@@ -116,7 +116,7 @@ The renormalization factor $P$ can be implemented with the branching algorithm. 
 
 Promising as DMC may seem, a critical approximation (fixed-node approximation) and an important improvement (importance sampling) should be made to put DMC really into use.
 
-## Fixed-Node Approximation
+## 4.2. Fixed-Node Approximation
 To simulate the real-time Schrodinger equation through walkers, it is necessary that the solution $\Phi$ is positive, so that it can be interpreted as a number density. However, in the case of Fermion with ansisymmetry, the wave function $\Phi$ has positive and negative regions sperated by nodal surfaces (places where $\Phi=0$). A Naive remedy is to assign signs to each walkers, but such method turns out to introduce unbearable noise. This is called a Fermion-sign problem. Some results have been made for small systems without approximation, but the introducig the fixed-node approximation is the probably the most popular choice.
 
 The idea of fixed-node approxiamtion is to introduce a trial wave function $\Psi_T$, and treat the nodal surface of $\Psi_T$ as walls. These walls partition the whole space into several pockets. DMC is then run in these pockets.
@@ -126,7 +126,7 @@ Consider, for example, a one-dimensional inifinte well. To impose the boundary c
 The fixed-node DMC then calculate the exact ground state with a given nodal surface. It thus introduce a systemetical error dependent on the choice of nodal surface. It can be proved that the energy gained from this approximation is no less than the true ground state energy.
 
 
-## Importrance Sampling
+## 4.3. Importrance Sampling
 In calculation, the factor $P$ may vary drastically or even diverge, making DMC inefficient. It can be improved through the importance sampling transformation. Introduce a "guiding" or "trial" wave function $\Psi_T(\boldsymbol{R})$, and perform the change-of-variable $f(\boldsymbol{R},t)=\Phi(\boldsymbol{R},t)\Psi_T(\boldsymbol{R})$. The imaginary-time Schrodinger equation than becomes
 $$-\frac{\partial f}{\partial t} = -\frac{1}{2}\nabla^2 f + \nabla \cdot [\boldsymbol{v}_D(\boldsymbol{R})f]+(E_L(\boldsymbol{R})-E_T)f,$$
 where $\boldsymbol{v}_D(\boldsymbol{R}) = \nabla \ln|\Psi_T(\boldsymbol{R})|=\Psi_T^{-1}\nabla \Psi_T$ is called the drift velocity, and $E_L(\boldsymbol{R})=\Psi_T^{-1}\hat{H}\Psi_T$ is the local energy. Note that both $\boldsymbol{v}_D$ and $E_L$ are konwn functions because $\Psi_T$ is known.
@@ -145,7 +145,7 @@ To impose this detailed balance, we may add an acceptance step after the move wi
 $$\begin{aligned}p_{acc}(\boldsymbol{R}\leftarrow\boldsymbol{R}')&=\min[1,\frac{G_dG_b(\boldsymbol{R}'\leftarrow \boldsymbol{R},\tau)|\Psi_T(\boldsymbol{R})|^2}{G_dG_b(\boldsymbol{R}\leftarrow \boldsymbol{R}',\tau)|\Psi_T(\boldsymbol{R}')|^2}]\\
 &=\min[1,\frac{G_d(\boldsymbol{R}'\leftarrow\boldsymbol{R},\tau)\Psi_T(\boldsymbol{R})^2}{G_d(\boldsymbol{R}\leftarrow\boldsymbol{R}',\tau)\Psi_T(\boldsymbol{R'})^2}]\end{aligned}.$$
 
-## DMC Summary
+## 4.4. DMC Summary
 The routine of DMC is clearly summarized in [2]. I quote it here.
 
 >1. Pick a trial function $\Psi_T$, from e.g., VMC. Scatter $N_c$ (100-500, or 1000) walkers in the configuration space with distribution $\Psi_T^2$.
@@ -159,11 +159,11 @@ The routine of DMC is clearly summarized in [2]. I quote it here.
 
 
 
-# Other Monte Carlo Methods
+# 5. Other Monte Carlo Methods
 Auxilary-Field QMC (AFQMC) and path-integral QMC are also used for many-body systems.
 
 
-# 5. Reference
+# 6. Reference
 [1]陈基. 量子蒙特卡洛算法[OL]. (2023-12-15) 合肥. https://www.koushare.com/video/videodetail/73856
   
 [2] W. M. C. Foulkes, L. Mitas, R. J. Needs, and G. Rajagopal, Quantum Monte Carlo Simulations of Solids, Rev. Mod. Phys. 73, 33 (2001).
