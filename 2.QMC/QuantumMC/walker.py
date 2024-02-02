@@ -59,17 +59,17 @@ class MarkovSampler(RandomWalker):
         else:
             self._if_observe = False
 
-    def _propose_new_step(state):
+    def propose_new_step(self, state):
         raise NotImplementedError("Proposal of a new step not implemented!")
 
-    def _accept_step(new_step, old_step):
+    def accept_step(self, new_step, old_step):
         raise NotImplementedError("Acceptance / rejection not implemented!")
 
     def step(self):
         '''A step of random walk.'''
-        next_state = self._propose_new_step(self.state)  # proposal
+        next_state = self.propose_new_step(self.state)  # proposal
         # acceptance
-        if self._accept_step(next_state, self.state):
+        if self.accept_step(next_state, self.state):
             self.state = next_state
         return self.state
 
@@ -97,7 +97,8 @@ class MarkovSampler(RandomWalker):
         # the first sample
         for j in range(n_step - n_cut):
             if j % n_interval == 0:
-                self._n_samples += 1
+                if self._if_sample or self._if_observe:
+                    self._n_samples += 1
                 if self._if_sample:
                     self._samples.append(self.state)
                 if self._if_observe:
@@ -146,10 +147,10 @@ class MetropolisSampler(MarkovSampler):
         else:
             self.propose_prob = lambda old, new: 1
 
-    def _propose_new_step(self, state):
+    def propose_new_step(self, state):
         return self.propose(state)
 
-    def _accept_step(self, new_step, old_step):
+    def accept_step(self, new_step, old_step):
         new = self.propose_prob(new_step, old_step) * self.pdf(new_step)
         old = self.propose_prob(old_step, new_step) * self.pdf(old_step)
         return np.random.random() < new / old
