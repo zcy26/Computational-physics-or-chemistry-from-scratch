@@ -145,10 +145,15 @@ To impose this detailed balance, we may add an acceptance step after the move wi
 $$\begin{aligned}p_{acc}(\boldsymbol{R}\leftarrow\boldsymbol{R}')&=\min[1,\frac{G_dG_b(\boldsymbol{R}'\leftarrow \boldsymbol{R},\tau)|\Psi_T(\boldsymbol{R})|^2}{G_dG_b(\boldsymbol{R}\leftarrow \boldsymbol{R}',\tau)|\Psi_T(\boldsymbol{R}')|^2}]\\
 &=\min[1,\frac{G_d(\boldsymbol{R}'\leftarrow\boldsymbol{R},\tau)\Psi_T(\boldsymbol{R})^2}{G_d(\boldsymbol{R}\leftarrow\boldsymbol{R}',\tau)\Psi_T(\boldsymbol{R'})^2}]\end{aligned}.$$
 
+Using importance sampling, it can be proved that the average value can be calculated as (see [2] for details):
+$$\langle H \rangle =\dots= \lim_{\tau\to \infty}\frac{\int{f(\boldsymbol{R},\tau)E_L(\boldsymbol{R})}\mathrm{d}\boldsymbol{R}}{\int{f(\boldsymbol{R},\tau)}\mathrm{d}\boldsymbol{R}}\approx \frac{1}{M}\sum_{i=1}^{M}E_L(\boldsymbol{R}_i),$$
+where $M$ is the number of walkers. For other quantities $\hat{S}$ not commuting with $\hat{H}$, one can use
+$$\langle \Phi |\hat{S}|\Phi\rangle=2\langle \Phi|\hat{S}|\Psi\rangle - \langle \Psi_T |\hat{S}|\Psi_T\rangle.$$
+
 ## 4.4. DMC Summary
 The routine of DMC is clearly summarized in [2]. I quote it here.
 
->1. Pick a trial function $\Psi_T$, from e.g., VMC. Scatter $N_c$ (100-500, or 1000) walkers in the configuration space with distribution $\Psi_T^2$.
+>1. Pick a trial function $\Psi_T$, from e.g., VMC. Scatter $M$ (100-500, or 1000) walkers in the configuration space with distribution $\Psi_T^2$.
 >2. Evaluate the drift velocith $\boldsymbol{v}_D$ for each walker.
 >3. Propagate each walker for a time step $\tau$ and move it to a new position $\boldsymbol{R}=\boldsymbol{R}+\chi+\tau\boldsymbol{v}_D(\boldsymbol{R}')$, where $\chi$ is a $3N_e$ dim Gaussian with variance $\tau$ and zero mean.
 >4. If the walker cross the nodal surface, i.e., if $\Psi_T(\boldsymbol{R})\Psi_T(\boldsymbol{R}')<0$, reject the move and the walker stays at $\boldsymbol{R}$.
