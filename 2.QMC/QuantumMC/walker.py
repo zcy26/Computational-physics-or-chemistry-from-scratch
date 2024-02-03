@@ -16,7 +16,7 @@ class RandomWalker(ABC):
         # raise NotImplementedError("Random walk is not implemented!")
 
 
-class MarkovSampler(RandomWalker):
+class Markov(RandomWalker):
     '''Markov chain walkers.'''
 
     def __init__(self, init_state, if_sample=False, observables=None):
@@ -130,7 +130,7 @@ class MarkovSampler(RandomWalker):
         return ret
 
 
-class MetropolisSampler(MarkovSampler):
+class Metropolis(Markov):
     def __init__(self, init_state, distribution, propose_step, propose_prob=None, observables=None, *params):
         '''A Sampler using Metropolis-Hastings algorithm.
         init_state: initial state.
@@ -175,7 +175,7 @@ if __name__ == "__main__":
             return -1
         elif x == 1:
             return 1
-    test = MetropolisSampler(1, distribution, propose, observables=O)
+    test = Metropolis(1, distribution, propose, observables=O)
     print(test._if_sample)
     fs, samples, obs_mean, obs_var, n = test.walk(5000, n_cut=100, n_interval=4)
     print("prob of 1:", sum(samples) / n)
