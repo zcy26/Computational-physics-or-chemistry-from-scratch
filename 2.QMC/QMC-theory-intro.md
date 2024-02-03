@@ -156,7 +156,7 @@ The routine of DMC is clearly summarized in [2]. I quote it here.
 >1. Pick a trial function $\Psi_ T$, from e.g., VMC. Scatter $M$ (100-500, or 1000) walkers in the configuration space with distribution $\Psi_ T^2$.
 >2. Evaluate the drift velocith $\boldsymbol{v}_ D$ for each walker.
 >3. Propagate each walker for a time step $\tau$ and move it to a new position $\boldsymbol{R}=\boldsymbol{R}+\chi+\tau\boldsymbol{v}_ D(\boldsymbol{R}')$, where $\chi$ is a $3N_ e$ dim Gaussian with variance $\tau$ and zero mean.
->4. If the walker cross the nodal surface, i.e., if $\Psi_ T(\boldsymbol{R})\Psi_ T(\boldsymbol{R}')$<$0$, reject the move and the walker stays at $\boldsymbol{R}$.
+>4. If the walker cross the nodal surface, i.e., if $\Psi_ T(\boldsymbol{R})\Psi_ T(\boldsymbol{R}')< 0$, reject the move and the walker stays at $\boldsymbol{R}$.
 >5. With probability $p_ {acc}$, accept the move. If the move is rejected, the walker stays at $\boldsymbol{R}$.
 >6. Cauculate the number of copies $M=\lfloor\eta+G_ b \rfloor$, where $\eta$ is a random variable uniformly distributed in [0,1].
 >7. Calculate the quantity of interest from the walkers, e.g., the energy.
