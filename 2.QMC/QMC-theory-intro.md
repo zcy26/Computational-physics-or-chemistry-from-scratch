@@ -132,7 +132,7 @@ $$-\frac{\partial f}{\partial t} = -\frac{1}{2}\nabla^2 f + \nabla \cdot [\bolds
 where $\boldsymbol{v}_ D(\boldsymbol{R}) = \nabla \ln|\Psi_ T(\boldsymbol{R})|=\Psi_ T^{-1}\nabla \Psi_ T$ is called the drift velocity, and $E_ L(\boldsymbol{R})=\Psi_ T^{-1}\hat{H}\Psi_ T$ is the local energy. Note that both $\boldsymbol{v}_ D$ and $E_ L$ are konwn functions because $\Psi_ T$ is known.
 
 The function of $f$ can similarly be solved through Green's function $f(\boldsymbol{R},t+\tau)=\int\tilde{G}(\boldsymbol{R}\leftarrow\boldsymbol{R}',\tau)f(\boldsymbol{R}',t)\mathrm{d}\boldsymbol{R}'$, where $\tilde{G}$ is related to the original Green's function $G$ (for $\Phi$) as $\tilde{G}=\Psi_ T(\boldsymbol{R})G(\boldsymbol{R}\leftarrow\boldsymbol{R}',\tau)\Psi_ T^{-1}(\boldsymbol{R}')$. Similarly, $\tilde{G}$ can be approximately decomposed into a Gaussian
-$$G_ d(\boldsymbol{R}\leftarrow\boldsymbol{R}',\tau)=(2\pi\tau)^{-3N_ e/2}\exp\left\{-\frac{[\boldsymbol{R}-\boldsymbol{R'}-\tau\boldsymbol{v}_ D(\boldsymbol{R}')]^2}{2\tau} \right\}$$
+$$G_ d(\boldsymbol{R}\leftarrow\boldsymbol{R}',\tau)=(2\pi\tau)^{-3N_ e/2}\exp\{-\frac{[\boldsymbol{R}-\boldsymbol{R'}-\tau\boldsymbol{v}_ D(\boldsymbol{R}')]^2}{2\tau} \}$$
 and a renormalization factor
 $$G_ b(\boldsymbol{R}\leftarrow\boldsymbol{R}',\tau)=\exp\{-\tau[E_ L(\boldsymbol{R})+E_ L(\boldsymbol{R})'-2E_ T]/2 \}$$
 as $G\approx G_ d G_ b$.
@@ -156,7 +156,7 @@ The routine of DMC is clearly summarized in [2]. I quote it here.
 >1. Pick a trial function $\Psi_ T$, from e.g., VMC. Scatter $M$ (100-500, or 1000) walkers in the configuration space with distribution $\Psi_ T^2$.
 >2. Evaluate the drift velocith $\boldsymbol{v}_ D$ for each walker.
 >3. Propagate each walker for a time step $\tau$ and move it to a new position $\boldsymbol{R}=\boldsymbol{R}+\chi+\tau\boldsymbol{v}_ D(\boldsymbol{R}')$, where $\chi$ is a $3N_ e$ dim Gaussian with variance $\tau$ and zero mean.
->4. If the walker cross the nodal surface, i.e., if $\Psi_ T(\boldsymbol{R})\Psi_ T(\boldsymbol{R}')<0$, reject the move and the walker stays at $\boldsymbol{R}$.
+>4. If the walker cross the nodal surface, i.e., if $\Psi_ T(\boldsymbol{R})\Psi_ T(\boldsymbol{R}')$<$0$, reject the move and the walker stays at $\boldsymbol{R}$.
 >5. With probability $p_ {acc}$, accept the move. If the move is rejected, the walker stays at $\boldsymbol{R}$.
 >6. Cauculate the number of copies $M=\lfloor\eta+G_ b \rfloor$, where $\eta$ is a random variable uniformly distributed in [0,1].
 >7. Calculate the quantity of interest from the walkers, e.g., the energy.
