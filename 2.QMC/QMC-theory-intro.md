@@ -112,7 +112,7 @@ If potential energy exists, we can use the Trotter-Suzuki formula $e^{-\tau(\hat
 $$G(\boldsymbol{R}\leftarrow \boldsymbol{R}',\tau)\approx G_ dP$$
 where $G_ d$ is the Gaussian of the kinetic part and the
 $$P=\exp\{-\tau[V(\boldsymbol{R})+V(\boldsymbol{R}')-2E_ T]/2\}.$$
-The renormalization factor $P$ can be implemented with the branching algorithm. At each time step, a move is proposed with distribution $G_ d$. Then, the walker is killed (i.e., eliminated) or copied for several times based on $P$: If $P<1$, the walker is killed with probability $1-P$; if $1\leq P < 2$, the walker survivies, and another walker is created with probability $P-1$... In short, the number of walkers going into the next step is $M=\lfloor P + \eta \rfloor$, with $\eta$ a random number uniformly distributed in $[0,1]$. The shift energy $E_ T$ will occasionally be varied to keep the number of walkers arround 100 or 1000.
+The renormalization factor $P$ can be implemented with the branching algorithm. At each time step, a move is proposed with distribution $G_ d$. Then, the walker is killed (i.e., eliminated) or copied for several times based on $P$: If P<1, the walker is killed with probability $1-P$; if 1<= P < 2, the walker survives, and another walker is created with probability $P-1$... In short, the number of walkers going into the next step is $M=\lfloor P + \eta \rfloor$, with $\eta$ a random number uniformly distributed in $[0,1]$. The shift energy $E_ T$ will occasionally be varied to keep the number of walkers arround 100 or 1000.
 
 Promising as DMC may seem, a critical approximation (fixed-node approximation) and an important improvement (importance sampling) should be made to put DMC really into use.
 
