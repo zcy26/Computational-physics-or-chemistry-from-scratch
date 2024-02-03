@@ -46,7 +46,7 @@ In other words, the solution of diffusion equation can be simulated by a lot of 
 # 3. Variational Monte Carlo (VMC)
 ## 3.1. Theory
 The idea of VMC is starightforward: add some variational parameters into a wave function ansatz, and optimize them by minimizing the energy $\langle H \rangle$. Monte Carlo come in when evaluating the energy integral:
-$$\langle H \rangle=\frac{\int \Psi^*(\boldsymbol{x})H\Psi(\boldsymbol{x})\mathrm{d}\boldsymbol{x}}{\int\Psi^*(\boldsymbol{x})\Psi(\boldsymbol{x})\mathrm{d}\boldsymbol{x}}=\int P(\boldsymbol{x}) E(\boldsymbol{x})\mathrm{d}\boldsymbol{x},$$
+$$\langle H \rangle=\frac{\int \Psi^* (\boldsymbol{x})H\Psi(\boldsymbol{x})\mathrm{d}\boldsymbol{x}}{\int\Psi^* (\boldsymbol{x})\Psi(\boldsymbol{x})\mathrm{d}\boldsymbol{x}}=\int P(\boldsymbol{x}) E(\boldsymbol{x})\mathrm{d}\boldsymbol{x},$$
 where $\boldsymbol{x}$ is a general coordinate include spacial and spin coordinate of all electrons, $P(\boldsymbol{x})=|\Psi(\boldsymbol{x})|^2/\int |\Psi(\boldsymbol{x})|^2\mathrm{d}\boldsymbol{x}$ is a probability distribution, and $E_ L(\boldsymbol{x})=\Psi^{-1}(\boldsymbol{x})H\Psi(\boldsymbol{x})$ is called the local energy. The energy integral can then evaluated through the Matropolis algorithm.
 
 In summary, VMC contains two loops: The outer optimization loop for variation and the inner Monte Carlo loop for integral:
