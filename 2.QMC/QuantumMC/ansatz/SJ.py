@@ -14,6 +14,11 @@ Elements = {
 
 class SJAnsatz(ABC):
 
+    def __init__(self):
+        self.n_elec = None
+        self.elec_pos = None
+        self.params = None
+
     @abstractmethod
     def D(self):
         '''calculate the determinant part. It only deals with calculation.'''
@@ -30,11 +35,6 @@ class SJAnsatz(ABC):
         pass
 
     @abstractmethod
-    def register(self, elec_idx, new_pos):
-        '''register electron position and initiate D, J, wf, etc. A trial move that may be rejected.'''
-        pass
-
-    @abstractmethod
-    def accept(self):
-        '''Accept the registered move.'''
+    def E_L(self):
+        '''return local energy.'''
         pass

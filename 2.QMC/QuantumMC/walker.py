@@ -39,10 +39,10 @@ class Markov(RandomWalker):
         self.state = init_state  # current state
         self._if_sample = if_sample  # whether to sample during the walk
         if if_sample:
-            self._samples = [self.state]  # list of samples
-            self._n_samples = 1  # number of samples, the initial state is counted
+            self._samples = []  # list of samples
+            self._n_samples = 0  # number of samples, the initial state is counted
         if observables != None:
-            self._n_samples = 1
+            self._n_samples = 0
             self._if_observe = True  # whether to observe a vale
             if hasattr(observables, "__iter__"):
                 self.observables = observables  # list of observables
@@ -54,8 +54,9 @@ class Markov(RandomWalker):
             self._obs_mean = []
             self._obs_M2 = []  # M2 = sum (x-mean)**2
             for obs in self.observables:
-                self._obs_mean.append(obs(self.state))  # mean
-                self._obs_M2.append(self._obs_mean[-1] - self._obs_mean[-1])  # variance
+                init_val = obs(self.state)
+                self._obs_mean.append(init_val - init_val)  # mean
+                self._obs_M2.append(self._obs_mean[-1])  # variance
         else:
             self._if_observe = False
 
@@ -68,22 +69,29 @@ class Markov(RandomWalker):
     def step(self):
         '''A step of random walk.'''
         next_state = self.propose_new_step(self.state)  # proposal
+        if_accept = False
         # acceptance
         if self.accept_step(next_state, self.state):
+            if_accept = True
             self.state = next_state
-        return self.state
+        return self.state, if_accept
 
-    def walk(self, n_step, n_cut=0, n_interval=1):
+    def walk(self, n_step, n_cut=0, n_interval=1, n_sample=None, tol=None):
         '''Perform a random walk. A walker can go under several walks, and the observables
         will be measured on all historical samples.
         Input:
         n_step: int
             number of steps of random walk to perform.
+            If n_sample and tol is not provided, the loop will stop after n_steps.
         n_cut: int
             if sampling is required, the number of steps omitted at the beginning.
         n_interval: int
             if sampling is required, the number of steps between each sample.
             If step k is sampled, the next sample is at step k+n_interval.
+        n_sample: int. Lower bound number of samples.
+        tol: (a list of) float.
+            If provided, the loop will stop when (for all observables) std err <= tol and n_sample >= tol.
+            If tol is provided, n_sample must also be provided.
         Output:
         fs: final state.
         sample: (if_sample=True) a list of samples sampled during the walk (if self.sample=True).
@@ -93,25 +101,54 @@ class Markov(RandomWalker):
         # initialization
         for i in range(n_cut):
             self.step()
-
+        print("start sampling")
         # the first sample
-        for j in range(n_step - n_cut):
-            if j % n_interval == 0:
-                if self._if_sample or self._if_observe:
-                    self._n_samples += 1
-                if self._if_sample:
-                    self._samples.append(self.state)
-                if self._if_observe:
-                    for k in range(len(self.observables)):
-                        # update through the "Welford algorithm"
-                        new = self.observables[k](self.state)
-                        delta = new - self._obs_mean[k]
-                        self._obs_mean[k] += delta / self._n_samples
-                        delta2 = new - self._obs_mean[k]
-                        self._obs_M2[k] += delta * delta2
-            self.step()
+        if n_sample or tol:
+            n_sample = n_sample if n_sample else np.inf
+            j = 0
+            while True:
+                if j % n_interval == 0:
+                    self._update_sample()
+                    if self._n_samples in range(0, n_sample, n_sample // 10):
+                        print(self._n_samples)
+                    # stop criterion
+                    # if self._n_samples >= n_sample:
+                    # break
+                    if self._n_samples < n_sample:
+                        # break
+                        if_break = False
+                    else:
+                        if_break = True
+                        if tol:
+                            for tol_i, obs in zip(tol, self._obs_M2):
+                                if np.all(np.sqrt(obs / self._n_samples / (self._n_samples-1)) > tol_i):
+                                    if_break = False
+                                    break
+                    if if_break:
+                        break
+
+                self.step()
+        else:
+            for j in range(n_step - n_cut):
+                if j % n_interval == 0:
+                    self._update_sample()
+                self.step()
 
         return self.state, *self.show_sample()
+
+    def _update_sample(self):
+        if self._if_sample or self._if_observe:
+            self._n_samples += 1
+        if self._if_sample:
+            self._samples.append(self.state)
+        if self._if_observe:
+            for k in range(len(self.observables)):
+                # update through the "Welford algorithm"
+                new = self.observables[k](self.state)
+                delta = new - self._obs_mean[k]
+                self._obs_mean[k] += delta / self._n_samples
+                delta2 = new - self._obs_mean[k]
+                self._obs_M2[k] += delta * delta2
 
     def show_sample(self):
         '''return the samples / observed values.
@@ -124,7 +161,7 @@ class Markov(RandomWalker):
         if self._if_observe:
             sample = True
             ret.append(self._obs_mean)
-            ret.append([M2/(self._n_samples-1) for M2 in self._obs_M2])
+            ret.append([M2 / (self._n_samples-1) for M2 in self._obs_M2])
         if sample:
             ret.append(self._n_samples)
         return ret
@@ -177,7 +214,7 @@ if __name__ == "__main__":
             return 1
     test = Metropolis(1, distribution, propose, observables=O)
     print(test._if_sample)
-    fs, samples, obs_mean, obs_var, n = test.walk(5000, n_cut=100, n_interval=4)
+    fs, samples, obs_mean, obs_var, n = test.walk(100000, n_cut=100, n_interval=4)
     print("prob of 1:", sum(samples) / n)
     # test
     samples = np.where(samples, 1, -1)
