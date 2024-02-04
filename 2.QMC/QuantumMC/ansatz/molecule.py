@@ -23,6 +23,7 @@ class Mole_SCF(SJAnsatz):
         n_alpha, n_beta: int, number of electrons of spin alpha and beta.
         spin: (n_e,). The first n_alpha elemen is 1, the remaining ones are -1.
         elec_pos: (n_e, 3). The first n_alpha are spin up, the other are spin down.
+
         perturb_idx: int. Electron to be perturbed.
         new_pos: (3,). Perturbed position of the perturbed electron.
         new_mo: (n_mo,). phi_j(r_i), the value of single-electron MO at the new_pos.
@@ -75,7 +76,12 @@ class Mole_SCF(SJAnsatz):
 
         # initiate parameters and local information
         self.params = params
+        self.init_other_params()
         self.refresh(elec_pos)
+
+    def init_other_params(self):
+        '''init other necessary paramters for subclasses.'''
+        return
 
     def refresh(self, elec_pos):
         '''Initiate all local evaluations. It serves as a refresh function when restarting.'''
@@ -301,6 +307,8 @@ class Pade_sing_param(Mole_SCF):
         self.n_constraint = 0
         if len(params) != self.n_params:
             raise ValueError("Number of parameters is wrong!")
+
+    def init_other_params(self):
         self.a = np.where(self.spin[:, None] * self.spin < 0, .5, .25)  # (Ne, Ne)
         self.b = np.sqrt(self.a / self.params[0])
 
@@ -375,7 +383,7 @@ if __name__ == "__main__":
     b = pyscf.gto.M(atom="Li 0 0 0", basis="6-31g", spin=1)
     mf = pyscf.scf.UHF(b)
     mf.kernel()
-    b_SJ = _Test(mf, np.array([[0, 0, 1], [0, 0, 4], [0, 0, 2.5]]), np.array([1]))
+    b_SJ = Pade_sing_param(mf, np.array([[0, 0, 1], [0, 0, 4], [0, 0, 2.5]]), np.array([1]))
     old_val = b_SJ.wf()
     print(b_SJ.E_L(), old_val)
     print()
