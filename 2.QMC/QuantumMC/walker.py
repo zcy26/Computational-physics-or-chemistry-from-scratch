@@ -110,7 +110,7 @@ class Markov(RandomWalker):
                 if j % n_interval == 0:
                     self._update_sample()
                     if self._n_samples in range(0, n_sample, n_sample // 10):
-                        print(self._n_samples)
+                        print(f"samples: {self._n_samples}/{n_sample}")
                     # stop criterion
                     # if self._n_samples >= n_sample:
                     # break

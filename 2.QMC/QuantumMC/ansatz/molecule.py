@@ -5,7 +5,7 @@ from scipy.misc import derivative
 from pyscf.scf.hf import RHF
 from pyscf.scf.rohf import ROHF
 from pyscf.scf.uhf import UHF
-from SJ import *
+from .SJ import *
 
 
 class Mole_SCF(SJAnsatz):
@@ -117,7 +117,7 @@ class Mole_SCF(SJAnsatz):
     def E_L(self, elec_pos, params):
         V_elec = self.V(elec_pos)
         Kin = self.K(elec_pos, params)
-        print(V_elec, Kin)
+        # print(V_elec, Kin)
         return V_elec + Kin + self.V_ion
 
 
