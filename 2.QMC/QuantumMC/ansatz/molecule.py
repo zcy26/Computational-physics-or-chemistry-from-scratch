@@ -211,15 +211,12 @@ class Mole_SCF(SJAnsatz):
     def V(self):
         '''electron-electron potential energy.'''
         # V_ee
-        V_ee_val = 0
-        for i in range(self.n_elec):
-            for j in range(i+1, self.n_elec):
-                V_ee_val += 1 / np.linalg.norm(self.elec_pos[i] - self.elec_pos[j])
+        rij = np.linalg.norm(self.elec_pos[:, np.newaxis, :] - self.elec_pos, axis=-1)  # (Ne, Ne, 3) -> norm (Ne, Ne)
+        np.fill_diagonal(rij, 1)  # avoid inf
+        V_ee_val = np.sum(np.triu(1 / rij, 1))
         # V_eI
-        V_eI_val = 0
-        for i in range(self.n_elec):
-            for j in range(self.n_ion):
-                V_eI_val -= self.Z[j] / np.linalg.norm(self.elec_pos[i] - self.ion_pos[j])
+        riI = np.linalg.norm(self.elec_pos[:, np.newaxis, :] - self.ion_pos, axis=-1)  # (Ne, NI, 3) -> (Ne, NI)
+        V_eI_val = - np.sum(self.Z / riI)
         return V_ee_val - V_eI_val
 
     def E_L(self):
@@ -264,15 +261,16 @@ class Mole_SCF(SJAnsatz):
         self.K_elec[self.perturb_idx] = K_i
         # update the potential energy
         V_delta = 0
-        for i in range(self.n_elec):
-            if i == self.perturb_idx:
-                continue
-            else:
-                V_delta += 1 / np.linalg.norm(self.elec_pos[i] - self.new_pos) -\
-                    1 / np.linalg.norm(self.elec_pos[i] - old_pos)
-        for I in range(self.n_ion):
-            V_delta += -self.Z[I] / np.linalg.norm(self.new_pos - self.ion_pos[I]) +\
-                self.Z[I] / np.linalg.norm(old_pos - self.ion_pos[I])
+        # Vee
+        r_new = np.linalg.norm(self.elec_pos - self.new_pos, axis=-1)
+        r_new[self.perturb_idx] = 1  # avoid 1/0
+        r_old = np.linalg.norm(self.elec_pos - old_pos, axis=-1)
+        r_old[self.perturb_idx] = 1
+        V_delta += np.sum(1 / r_new - 1 / r_old)
+        # VeI
+        r_new = np.linalg.norm(self.new_pos - self.ion_pos, axis=-1)
+        r_old = np.linalg.norm(old_pos - self.ion_pos, axis=-1)
+        V_delta += np.sum(-self.Z / r_new + self.Z / r_old)
         self.V_elec += V_delta
     # ---------------------------- update related ---------------------------------------
 
@@ -303,28 +301,73 @@ class Pade_sing_param(Mole_SCF):
         self.n_constraint = 0
         if len(params) != self.n_params:
             raise ValueError("Number of parameters is wrong!")
+        self.a = np.where(self.spin[:, None] * self.spin < 0, .5, .25)  # (Ne, Ne)
+        self.b = np.sqrt(self.a / self.params[0])
 
     def J(self):
         J_val = 0
         beta = self.params[0]
         # ee correlation
-        for i in range(self.n_elec):
-            for j in (i+1, self.n_elec):
-                if i < self.n_alpha and j >= self.n_alpha:
-                    a = .5  # different spins
-                else:
-                    a = .25  # same spin
-                rij = np.linalg.norm(self.elec_pos[i] - self.elec_pos[j])
-                b = np.sqrt(a / beta)
-                J_val += a * rij / (1 + b * rij)
+        rij = np.linalg.norm(self.elec_pos[:, np.newaxis, :] - self.elec_pos, axis=-1)  # (Ne, Ne, 3) -> norm (Ne, Ne)
+        np.fill_diagonal(rij, 1)  # avoid inf
+        J_val += np.sum(np.triu(self.a * rij / (1 + self.b * rij), 1))  # triu set the diagonal and lower diagonal to zero
         # eI correlation
-        for i in range(self.n_elec):
-            for j in range(self.n_ion):
-                a = 1.
-                b = np.sqrt(a / beta)
-                rij = np.linalg.norm(self.elec_pos[i] - self.ion_pos[j])
-                J_val -= self.Z[j] * a * rij / (1 + b * rij)
-        return
+        b = np.sqrt(1 / beta)
+        riI = np.linalg.norm(self.elec_pos[:, np.newaxis, :] - self.ion_pos, axis=-1)  # (Ne, NI, 3) -> (Ne, NI)
+        J_val -= np.sum(self.Z * riI / (1 + b * riI))
+        return J_val
+
+    def _grad_J(self, elec_idx):
+        grad_val = 0
+        beta = self.params[0]
+        # ee
+        rij_vec = self.elec_pos[elec_idx, :] - self.elec_pos  # (Ne, 3)
+        rij = np.linalg.norm(rij_vec, axis=-1)  # (Ne, )
+        rij[elec_idx] = 1  # avoid inf
+        rij = rij.reshape(-1, 1)
+        grad_mat = self.a[elec_idx] / (1 + self.b[elec_idx] * rij)**2 * rij_vec / rij  # (N_e, 3)
+        grad_mat[elec_idx] = 0  # no rii
+        grad_val += np.sum(grad_mat, axis=0)
+        # eI
+        b_I = np.sqrt(1. / beta)
+        riI_vec = self.elec_pos[elec_idx] - self.ion_pos  # (NI, 3)
+        riI = np.linalg.norm(riI_vec, axis=-1)  # (NI,)
+        riI = riI.reshape(-1, 1)
+        grad_val -= np.sum(self.Z[:, np.newaxis] * riI_vec / riI / (1 + b_I * riI)**2, axis=0)
+        return grad_val
+
+    def _lap_J(self, elec_idx):
+        lap_val = 0
+        beta = self.params[0]
+        # ee
+        rij = np.linalg.norm(self.elec_pos[elec_idx, :] - self.elec_pos, axis=-1)
+        rij[elec_idx] = 1
+        lap_mat = 2 * self.a[elec_idx] / rij / (1 + self.b[elec_idx] * rij)**3  # (Ne,)
+        lap_mat[elec_idx] = 0
+        lap_val += np.sum(lap_mat)
+        # eI
+        b_I = np.sqrt(1. / beta)
+        riI = np.linalg.norm(self.elec_pos[elec_idx] - self.ion_pos, axis=-1)  # (NI,)
+        lap_val -= np.sum(self.Z * 2 / riI / (1 + b_I * riI)**3)
+        return lap_val
+
+    def J_update(self, elec_idx, new_pos):
+        delta_J = 0
+        old_pos = self.elec_pos[elec_idx]
+        # ee
+        r_ij_new = np.linalg.norm(new_pos - self.elec_pos, axis=-1)  # (Ne, )
+        r_ij_old = np.linalg.norm(old_pos - self.elec_pos, axis=-1)  # (Ne, )
+        r_ij_new[elec_idx] = r_ij_old[elec_idx] = 1
+        delta_mat = self.a[elec_idx] * r_ij_new / (1 + self.b[elec_idx] * r_ij_new) -\
+            self.a[elec_idx] * r_ij_old / (1 + self.b[elec_idx] * r_ij_old)
+        delta_mat[elec_idx] = 0  # no rii
+        delta_J += np.sum(delta_mat)
+        # eI
+        b_I = np.sqrt(1 / self.params[0])
+        r_iI_new = np.linalg.norm(new_pos - self.ion_pos, axis=-1)  # (NI,)
+        r_iI_old = np.linalg.norm(old_pos - self.ion_pos, axis=-1)  # (NI,)
+        delta_J += np.sum(-self.Z * r_iI_new / (1 + b_I * r_iI_new) + self.Z * r_iI_old / (1 + b_I * r_iI_old))
+        return delta_J
 
 
 if __name__ == "__main__":
