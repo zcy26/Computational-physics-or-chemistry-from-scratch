@@ -165,6 +165,8 @@ The routine of DMC is clearly summarized in [2]. I quote it here.
 
 
 # 5. Other Monte Carlo Methods
+Full-CI quantum montecarlo (FCIQMC) is developed in recent years. FCIQMC and DMC bears the similar manar, but FCIQMC solve the imaginary-time Schrodinger equation in the discrete deterimant space. As a result, the DMC walkers walking in the config space now becomes walkers sitting on a set of discrete slots representing each determinant. The diffusion also becomes spawning, dieing / copying and annhilation. See [6-8].
+
 Auxilary-Field QMC (AFQMC) and path-integral QMC are also used for many-body systems.
 
 
@@ -178,4 +180,11 @@ Auxilary-Field QMC (AFQMC) and path-integral QMC are also used for many-body sys
 [4] L. M. Fraser, W. M. C. Foulkes, G. Rajagopal, R. J. Needs, S. D. Kenny, and A. J. Williamson, Finite-Size Effects and Coulomb Interactions in Quantum Monte Carlo Calculations for Homogeneous Systems with Periodic Boundary Conditions, Phys. Rev. B 53, 1814 (1996).
 
 [5] S. Fahy, X. W. Wang, and S. G. Louie, Variational Quantum Monte Carlo Nonlocal Pseudopotential Approach to Solids: Formulation and Application to Diamond, Graphite, and Silicon, Phys. Rev. B 42, 3503 (1990).
+
+[6] G. H. Booth, A. J. W. Thom, and A. Alavi, Fermion Monte Carlo without Fixed Nodes: A Game of Life, Death, and Annihilation in Slater Determinant Space, The Journal of Chemical Physics 131, 054106 (2009).
+
+[7] K. Ghanem, A. Y. Lozovoi, and A. Alavi, Unbiasing the Initiator Approximation in Full Configuration Interaction Quantum Monte Carlo, The Journal (2024).
+
+[8] K. Guther et al., NECI: N -Electron Configuration Interaction with an Emphasis on State-of-the-Art Stochastic Methods, The Journal of Chemical Physics 153, 034107 (2020).
+
 
