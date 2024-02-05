@@ -38,3 +38,8 @@ class SJAnsatz(ABC):
     def E_L(self):
         '''return local energy.'''
         pass
+
+    @abstractmethod
+    def v_D(self):
+        '''return drift velocity.'''
+        pass

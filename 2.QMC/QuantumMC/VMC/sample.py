@@ -5,7 +5,7 @@ from .. import walker
 
 
 def VMC_E(params, init_state, sigma, ansatz: SJAnsatz, n_cut=10000, n_interval=50, n_sample=10000,
-          tol=None, E_only=True):
+          tol=None, E_only=True, verbose=False):
     if tol:
         tol = [tol]
 
@@ -22,7 +22,8 @@ def VMC_E(params, init_state, sigma, ansatz: SJAnsatz, n_cut=10000, n_interval=5
     def E_loc(elec_pos):
         return ansatz.E_L(elec_pos, params)
     sampler = walker.Metropolis(init_state, distribution=dist, propose_step=propose_step, observables=E_loc)
-    fs, sample, E_mean, E_var, n = sampler.walk(1, n_cut=n_cut, n_interval=n_interval, n_sample=n_sample, tol=tol)
+    fs, sample, E_mean, E_var, n = sampler.walk(1, n_cut=n_cut, n_interval=n_interval,
+                                                n_sample=n_sample, tol=tol, verbose=verbose)
     E_mean, E_var = E_mean[0], E_var[0]
     if E_only:
         return E_mean

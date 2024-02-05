@@ -27,7 +27,7 @@ class Mole_SCF(SJAnsatz):
 
     '''
 
-    def __init__(self, mf: UHF | RHF | ROHF, elec_pos, params: np.ndarray):
+    def __init__(self, mf: UHF | RHF | ROHF, params: np.ndarray, elec_pos=None):
         self.mf = mf
         # ion configuration
         self.Z = []
@@ -67,8 +67,11 @@ class Mole_SCF(SJAnsatz):
 
         # initiate parameters and local information
         self.params = params
-        # self.init_other_params()
+        self.init_other_params()
         # self.refresh(elec_pos)
+
+    def init_other_params(self):
+        pass
 
     def D(self, elec_pos):
         basis = self.mf.mol.eval_ao("GTOval_sph", elec_pos)  # (n_elect, n_basis)
@@ -111,7 +114,7 @@ class Mole_SCF(SJAnsatz):
                     elec_pos_ij = elec_pos.copy()
                     elec_pos_ij[i, j] = xij
                     return self.wf(elec_pos_ij, params)
-            lap += derivative(f, elec_pos[i, j], dx=1e-5, n=2, order=5)
+                lap += derivative(f, elec_pos[i, j], dx=1e-5, n=2, order=5)
         return -lap / psi / 2
 
     def E_L(self, elec_pos, params):
@@ -120,10 +123,51 @@ class Mole_SCF(SJAnsatz):
         # print(V_elec, Kin)
         return V_elec + Kin + self.V_ion
 
+    def v_D(self, elec_pos, params):
+        grad = np.zeros_like(elec_pos)
+        x, y = elec_pos.shape
+        psi = self.wf(elec_pos, params)
+        for i in range(x):
+            for j in range(y):
+                def f(xij):
+                    elec_pos_ij = elec_pos.copy()
+                    elec_pos_ij[i, j] = xij
+                    return self.wf(elec_pos_ij, params)
+                grad[i, j] += derivative(f, elec_pos[i, j], dx=1e-5, n=1, order=5)
+        return grad
+
 
 class Pure_det(Mole_SCF):
     def J(self, elec_pos, params):
         return 0
+
+
+class Pade_sing_param(Mole_SCF):
+    '''only one parameter beta.'''
+
+    def __init__(self, mf: UHF | RHF | ROHF, params: np.ndarray, elec_pos=None):
+        super().__init__(mf, elec_pos, params)
+        self.n_params = 1
+        self.n_constraint = 0
+        if len(params) != self.n_params:
+            raise ValueError("Number of parameters is wrong!")
+
+    def init_other_params(self):
+        self.a = np.where(self.spin[:, None] * self.spin < 0, .5, .25)  # (Ne, Ne)
+        self.b = np.sqrt(self.a / self.params[0])
+
+    def J(self):
+        J_val = 0
+        beta = self.params[0]
+        # ee correlation
+        rij = np.linalg.norm(self.elec_pos[:, np.newaxis, :] - self.elec_pos, axis=-1)  # (Ne, Ne, 3) -> norm (Ne, Ne)
+        np.fill_diagonal(rij, 1)  # avoid inf
+        J_val += np.sum(np.triu(self.a * rij / (1 + self.b * rij), 1))  # triu set the diagonal and lower diagonal to zero
+        # eI correlation
+        b = np.sqrt(1 / beta)
+        riI = np.linalg.norm(self.elec_pos[:, np.newaxis, :] - self.ion_pos, axis=-1)  # (Ne, NI, 3) -> (Ne, NI)
+        J_val -= np.sum(self.Z * riI / (1 + b * riI))
+        return J_val
 
 
 if __name__ == "__main__":

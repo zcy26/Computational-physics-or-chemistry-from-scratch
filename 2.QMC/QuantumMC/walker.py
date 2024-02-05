@@ -76,7 +76,7 @@ class Markov(RandomWalker):
             self.state = next_state
         return self.state, if_accept
 
-    def walk(self, n_step, n_cut=0, n_interval=1, n_sample=None, tol=None):
+    def walk(self, n_step, n_cut=0, n_interval=1, n_sample=None, tol=None, verbose=False):
         '''Perform a random walk. A walker can go under several walks, and the observables
         will be measured on all historical samples.
         Input:
@@ -109,7 +109,7 @@ class Markov(RandomWalker):
             while True:
                 if j % n_interval == 0:
                     self._update_sample()
-                    if self._n_samples in range(0, n_sample, n_sample // 10):
+                    if self._n_samples in range(0, n_sample, n_sample // 10) and verbose:
                         print(f"samples: {self._n_samples}/{n_sample}")
                     # stop criterion
                     # if self._n_samples >= n_sample:
