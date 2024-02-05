@@ -20,26 +20,31 @@ class SJAnsatz(ABC):
         self.params = None
 
     @abstractmethod
-    def D(self):
+    def D(self, elec_pos):
         '''calculate the determinant part. It only deals with calculation.'''
         pass
 
     @abstractmethod
-    def J(self):
+    def J(self, elec_pos):
         '''calculate the Jastrow factor. It only deal with calculation.'''
         pass
 
     @abstractmethod
-    def wf(self):
+    def wf(self, elec_pos):
         '''calculate the wave function: exp(J)*D'''
         pass
 
     @abstractmethod
-    def E_L(self):
+    def E_L(self, elec_pos):
         '''return local energy.'''
         pass
 
     @abstractmethod
-    def v_D(self):
+    def v_D(self, elec_pos):
         '''return drift velocity.'''
+        pass
+
+    @abstractmethod
+    def copy(self):
+        '''copy the object.'''
         pass

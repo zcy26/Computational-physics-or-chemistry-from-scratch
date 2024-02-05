@@ -86,11 +86,11 @@ class Mole_SCF(SJAnsatz):
         # beta = [D_beta, cof_beta]
         return np.linalg.det(D_alpha) * np.linalg.det(D_beta)
 
-    def J(self, elec_pos, params):
+    def J(self, elec_pos):
         raise NotImplementedError("The J factor not implemented!")
 
-    def wf(self, elec_pos, params):
-        return np.exp(self.J(elec_pos, params)) * self.D(elec_pos)
+    def wf(self, elec_pos):
+        return np.exp(self.J(elec_pos)) * self.D(elec_pos)
 
     def V(self, elec_pos):
         '''electron-electron potential energy.'''
@@ -103,42 +103,45 @@ class Mole_SCF(SJAnsatz):
         V_eI_val = - np.sum(self.Z / riI)
         return V_ee_val + V_eI_val
 
-    def K(self, elec_pos, params):
+    def K(self, elec_pos):
         '''kinetic energy through numerical derivative.'''
         lap = 0
         x, y = elec_pos.shape
-        psi = self.wf(elec_pos, params)
+        psi = self.wf(elec_pos)
         for i in range(x):
             for j in range(y):
                 def f(xij):
                     elec_pos_ij = elec_pos.copy()
                     elec_pos_ij[i, j] = xij
-                    return self.wf(elec_pos_ij, params)
+                    return self.wf(elec_pos_ij)
                 lap += derivative(f, elec_pos[i, j], dx=1e-5, n=2, order=5)
         return -lap / psi / 2
 
-    def E_L(self, elec_pos, params):
+    def E_L(self, elec_pos):
         V_elec = self.V(elec_pos)
-        Kin = self.K(elec_pos, params)
+        Kin = self.K(elec_pos)
         # print(V_elec, Kin)
         return V_elec + Kin + self.V_ion
 
-    def v_D(self, elec_pos, params):
+    def v_D(self, elec_pos):
         grad = np.zeros_like(elec_pos)
         x, y = elec_pos.shape
-        psi = self.wf(elec_pos, params)
+        psi = self.wf(elec_pos)
         for i in range(x):
             for j in range(y):
                 def f(xij):
                     elec_pos_ij = elec_pos.copy()
                     elec_pos_ij[i, j] = xij
-                    return self.wf(elec_pos_ij, params)
+                    return self.wf(elec_pos_ij)
                 grad[i, j] += derivative(f, elec_pos[i, j], dx=1e-5, n=1, order=5)
         return grad
 
+    def copy(self):  # copy is crucial if the ansatz records local information
+        return self
+
 
 class Pure_det(Mole_SCF):
-    def J(self, elec_pos, params):
+    def J(self, elec_pos):
         return 0
 
 
@@ -156,7 +159,7 @@ class Pade_sing_param(Mole_SCF):
         self.a = np.where(self.spin[:, None] * self.spin < 0, .5, .25)  # (Ne, Ne)
         self.b = np.sqrt(self.a / self.params[0])
 
-    def J(self):
+    def J(self, elec_pos):
         J_val = 0
         beta = self.params[0]
         # ee correlation

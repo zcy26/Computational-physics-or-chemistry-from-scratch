@@ -70,11 +70,12 @@ class Markov(RandomWalker):
         '''A step of random walk.'''
         next_state = self.propose_new_step(self.state)  # proposal
         if_accept = False
+        old_state = self.state
         # acceptance
         if self.accept_step(next_state, self.state):
             if_accept = True
             self.state = next_state
-        return self.state, if_accept
+        return old_state, self.state, if_accept
 
     def walk(self, n_step, n_cut=0, n_interval=1, n_sample=None, tol=None, verbose=False):
         '''Perform a random walk. A walker can go under several walks, and the observables
