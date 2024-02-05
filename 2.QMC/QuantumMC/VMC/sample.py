@@ -26,7 +26,7 @@ def VMC_E(params, init_state, sigma, ansatz: SJAnsatz, n_cut=10000, n_interval=5
         tol = [tol]
 
     def dist(state):
-        return ansatz.wf(state)
+        return ansatz.wf(state)**2
 
     def propose_step(state):
         i = np.random.randint(0, ansatz.n_elec)

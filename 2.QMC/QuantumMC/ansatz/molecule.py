@@ -149,7 +149,7 @@ class Pade_sing_param(Mole_SCF):
     '''only one parameter beta.'''
 
     def __init__(self, mf: UHF | RHF | ROHF, params: np.ndarray, elec_pos=None):
-        super().__init__(mf, elec_pos, params)
+        super().__init__(mf, params=params, elec_pos=elec_pos)
         self.n_params = 1
         self.n_constraint = 0
         if len(params) != self.n_params:
@@ -163,12 +163,12 @@ class Pade_sing_param(Mole_SCF):
         J_val = 0
         beta = self.params[0]
         # ee correlation
-        rij = np.linalg.norm(self.elec_pos[:, np.newaxis, :] - self.elec_pos, axis=-1)  # (Ne, Ne, 3) -> norm (Ne, Ne)
+        rij = np.linalg.norm(elec_pos[:, np.newaxis, :] - elec_pos, axis=-1)  # (Ne, Ne, 3) -> norm (Ne, Ne)
         np.fill_diagonal(rij, 1)  # avoid inf
         J_val += np.sum(np.triu(self.a * rij / (1 + self.b * rij), 1))  # triu set the diagonal and lower diagonal to zero
         # eI correlation
         b = np.sqrt(1 / beta)
-        riI = np.linalg.norm(self.elec_pos[:, np.newaxis, :] - self.ion_pos, axis=-1)  # (Ne, NI, 3) -> (Ne, NI)
+        riI = np.linalg.norm(elec_pos[:, np.newaxis, :] - self.ion_pos, axis=-1)  # (Ne, NI, 3) -> (Ne, NI)
         J_val -= np.sum(self.Z * riI / (1 + b * riI))
         return J_val
 

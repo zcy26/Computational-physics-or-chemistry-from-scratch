@@ -102,7 +102,8 @@ class Markov(RandomWalker):
         # initialization
         for i in range(n_cut):
             self.step()
-        print("start sampling")
+        if verbose:
+            print("start sampling")
         # the first sample
         if n_sample or tol:
             n_sample = n_sample if n_sample else np.inf
@@ -110,7 +111,7 @@ class Markov(RandomWalker):
             while True:
                 if j % n_interval == 0:
                     self._update_sample()
-                    if self._n_samples in range(0, n_sample, n_sample // 10) and verbose:
+                    if self._n_samples in range(0, n_sample+1, n_sample // 10) and verbose:
                         print(f"samples: {self._n_samples}/{n_sample}")
                     # stop criterion
                     # if self._n_samples >= n_sample:

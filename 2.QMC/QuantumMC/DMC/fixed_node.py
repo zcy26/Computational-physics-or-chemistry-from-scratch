@@ -111,7 +111,7 @@ def DMC_walk(ansatz: SJAnsatz, init_states: np.ndarray, init_ET, tau=0.01,
         step += 1
         if step % 20 == 0:  # adjust E_T
             E_T -= C_E * np.log(len(walkers) / n_walker)
-        if verbose and step in range(0, n_step, n_step//10):
+        if verbose and step in range(0, n_step+1, n_step//10):
             print(f"step {step}: E_mean={E_mean:.5f}, n_walker={len(walkers)}, acc_rate={acc_rate:.5f}")
         if step >= n_step:
             break
