@@ -165,7 +165,7 @@ The routine of DMC is clearly summarized in [2]. I quote it here.
 
 
 # 5. Other Monte Carlo Methods
-Full-CI quantum montecarlo (FCIQMC) is developed in recent years. FCIQMC and DMC bears the similar manar, but FCIQMC solve the imaginary-time Schrodinger equation in the discrete deterimant space. As a result, the DMC walkers walking in the config space now becomes walkers sitting on a set of discrete slots representing each determinant. The diffusion also becomes spawning, dieing / copying and annhilation. See [6-8].
+Full-CI quantum montecarlo (FCIQMC) is developed in recent years. FCIQMC, like DMC, solves the imaginary-time Schrodinger equation, but in the discrete FCI deterimant space. As a result, the DMC walkers walking in the config space now becomes walkers sitting on a set of discrete slots representing each determinant. The diffusion also becomes spawning, dieing / copying and annhilation. See [6-8].
 
 Auxilary-Field QMC (AFQMC) and path-integral QMC are also used for many-body systems.
 
