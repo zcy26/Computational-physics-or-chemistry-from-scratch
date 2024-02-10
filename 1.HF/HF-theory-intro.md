@@ -121,9 +121,11 @@ where the $a$'s are undertermined scaler coefficients, and the $\hat{c}^{\dagger
 
 The conbination coefficients are determined through the variational principle. Like the HF method, the variational principle finally leads to an eigen alue problem. When $n=N_ e$, i.e., when all possible excitations are included in the CI trial wave function, the method is termed the full configurational interaction (FCI) method. FCI calculation gives an exact solution within the subspace spanned by the HF orbits. This is termed the Full-CI limit. If, as an ideal case, the Hartree-Fock limit (complete basis set) and the Full-CI limit are both reached, we get a *precise* solution under the non-relativisitc and BO aprroximation (Hartree-Fock method page on Wikipedia). Note that, the complete space of FCI is exponentially, or even factorially large. This is why quantum chemistry is so difficult!
 
+# 4. Summary
+In Hartree Fock method, a single slater determinant is used as the wave function ansatz, which results in the mean-field HF equations, where some correlations are omitted. The HF equations are converted to a matrix eigen value problem if expaned on a set of discrete basis. To retrieve the correlation energy, different "excited states" are used to form more slater determinants, leading to post-HF method and the FCI limit.
 
 
-# 4. Reference
+# 5. Reference
 [1] Y. Shikano, H. C. Watanabe, K. M. Nakanishi, and Y. Ohnishi, Post-Hartree–Fock Method in Quantum Chemistry for Quantum Computer, Eur. Phys. J. Spec. Top. 230, 1037 (2021).
 
 [2] P. Echenique and J. L. Alonso, A Mathematical and Computational Review of Hartree-Fock SCF Methods in Quantum Chemistry, Molecular Physics 105, 3057 (2007).

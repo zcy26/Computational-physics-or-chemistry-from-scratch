@@ -169,8 +169,10 @@ Full-CI quantum montecarlo (FCIQMC) is developed in recent years. FCIQMC, like D
 
 Auxilary-Field QMC (AFQMC) and path-integral QMC are also used for many-body systems.
 
+# 6. Summary
+VMC is simply minimizing the energy expectation after choosing a wave function ansatz (SJ form), where the energy integrals are computed with Monte Carlo method. DMC is a projection method, based on the fact that the imaginary time evolution operator approaches the projection onto the ground state as the imaginary time approaches infinity. DMC simulates the long time limit of the imaginary time Schrodinger equation by random walk of walkers in the configuration space.
 
-# 6. Reference
+# 7. Reference
 [1]陈基. 量子蒙特卡洛算法[OL]. (2023-12-15) 合肥. https://www.koushare.com/video/videodetail/73856
   
 [2] W. M. C. Foulkes, L. Mitas, R. J. Needs, and G. Rajagopal, Quantum Monte Carlo Simulations of Solids, Rev. Mod. Phys. 73, 33 (2001).
