@@ -137,8 +137,8 @@ The conbination coefficients are determined through the variational principle. L
 Several simplifications are introduced into the FCI methods to make the problem tractable. As is clearly explained in the presentation slide [4], one has to seperately consider the situation of weak correlation and strong correlation.
 
 In the weak correlation region, the coefficient of the original HF determinant dominates in the FCI wave function. This leading to the single reference wave methods, where the HF determinant is treated as a "reference" wave function, and some corrections are added to include the correlations. The most Naive method is to truncate the FCI wave function to retain only single (S) and double (D) excitations, i.e., CISD. However, CI methods do not satisfy the size-consistency property [4] ($E(A+B)=E(A)+E(B)$ for non-interacting subsystems $A$ and $B$), so other methods are motivated. One notable method is the coupled cluster method, where the wave function ansatz is different from FCI:
-$$\Psi_ {CC} = e^{T} \Psi_ {HF},$$
-where $T$ is the sum of all possible excitation operators similar to the FCI wave function. The CC wave function can  in theory reach the FCI limit if not truncated, and can also be truncated (e.g., CCSD). The CC method can be starightforwardly implemented on a quantum computer.
+$$\Psi_ {CC} = e^{\hat{T}} \Psi_ {HF},$$
+where $\hat{T}$ is the sum of all possible excitation operators similar to the FCI wave function. The CC wave function can  in theory reach the FCI limit if not truncated, and can also be truncated (e.g., CCSD). The CC method can be starightforwardly implemented on a quantum computer.
 
 In the strong correlation region, the HF term no longer dominates, and one have to use "multiple reference wave functions". I will not introduce these multiple reference methods here.
 
