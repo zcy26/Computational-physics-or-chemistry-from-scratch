@@ -12,9 +12,9 @@ The Hartree-Fock approximation approximates the total electron wave function as 
 \psi_ {N_ e}(x_ 1) &\psi_ {N_ e}(x_ 2) &\dots &\psi_ {N_ e}(x_ {N_ 3})\\
 \end{matrix} \right|,$$ -->
 $$|\psi_ e\rangle \approx |\Psi_ {HF}\rangle = \frac{1}{\sqrt{N_ e!}}\det \boldsymbol{D}$$
-where $D_ {ij}=\psi_ i(x_ j)$, $i=1,\dots,N_ e$ is the "Slater matrix", and the single electron orbitals $\psi_ {i}$'s are yet to be determined through the variational method. Note that $x$ is a general coordinate. In a more explicit form, each wave function contains a spin up part and a spin down part:
+where $D_ {ij}=\psi_ i(x_ j)$, $i=1,\dots,N_ e$ is the "Slater matrix", and the single electron spin-orbitals $\psi_ {i}$'s are yet to be determined through the variational method. Note that $\psi$'s are called spin-orbitals because the general coordinate $x$ contains both spacial part and spin part. More explicitly, the spin-orbitals read:
 $$\psi(x)=\psi(\boldsymbol{r},\sigma)=\phi^{\alpha}(\boldsymbol{r})\alpha(\sigma) + \phi^{\beta}(\boldsymbol{r})\beta(\sigma),$$
-where $\alpha(\sigma)=\delta_ {\sigma,\frac{1}{2}}$ and $\beta(\sigma)=\delta_ {\sigma,\frac{-1}{2}}$.
+where $\alpha(\sigma)=\delta_ {\sigma,\frac{1}{2}}$ and $\beta(\sigma)=\delta_ {\sigma,\frac{-1}{2}}$, and the function $\phi(\boldsymbol{r})$ may be called "spacial orbitals".
 
 Minimizing the energy intergral using the HF determinant, one gets the HF equation
 $$F[\psi]\psi_ i(x) = \epsilon_ i \psi_ i(x),$$
@@ -33,7 +33,7 @@ $$E=\langle H \rangle = \sum_ i \epsilon_ i - \frac{1}{2}\sum_ {i,j}(J_ {ij}-K_ 
 
 Each function $\psi_ j(x)$ can be interpreted as a single-electron orbit. Under this interpretation, the Fock equation can be interpreted as the equation of motion (the Schrodinger equation) of a single electron moving in the mean field of other electrons. The coulomb operator $J_ i[\psi]$ is actually the mean electric field of atoms. Furthermore, if we assume the orbitals are unchanged with the electron on the kth orbital removed, one can show that the energy change, i.e., the ionzization energy is $-\epsilon_ k$ (the Koopmans' Theorem [2]), which agian indicates the interpretation of single-electron orbital of the HF method.
 
-One of the most significant flaw of HF theory is that some coorelations are neglected due to the mean-field theory. (See the discussion on the ["electron correlation" page](https://en.wikipedia.org/wiki/Electron_ correlation) and ["Hartree-Fock method" page](https://en.wikipedia.org/wiki/Hartree%E2%80%93Fock_ method) on Wikipedia.) Mathematically speaking, the coorelation of two random variables $x_ 1$ and $x_ 2$ means their joint distribution is not a product of marginal distribution:
+One of the most significant flaw of HF theory is that some coorelations are neglected due to the mean-field theory. (See the discussion on the ["electron correlation" page](https://en.wikipedia.org/wiki/Electron_correlation) and ["Hartree-Fock method" page](https://en.wikipedia.org/wiki/Hartree%E2%80%93Fock_method) on Wikipedia.) Mathematically speaking, the coorelation of two random variables $x_ 1$ and $x_ 2$ means their joint distribution is not a product of marginal distribution:
 $$\rho(x_ 1,x_ 2)\neq \rho(x_ 1)\rho(x_ 2).$$
 The Hartree Fock method includes some, but not all correlations.
 
@@ -48,7 +48,7 @@ i.e., there is no correlation between electrons.
 Now, in the Hartree-Fock approximation, the wave function $\psi(x_ 1,\dots,x_ {N_ e})$ is a determinant, which has correctly accounted for the permutation symmetry of electron. It leads to the exchange operator in the Fock equations, which can roughly be interpreted as the "exchange energy" or "exchange force" between fermions. The probability density
 $$\rho(x_ i,x_ j)=N_ e(N_ e-1)\int \prod_ {k\neq i,j}\mathrm{d}x_ k |\psi(x_ 1,\dots,x_ {N_ e})|^2.$$
 is the probability of finding *any* electron at $x_ i$ and *any other* electron at $x_ j$. Note that the factor should be $N_ e(N_ e-1)$ instead of $N_ e(N_ e-1)/2$ (the factor used in reference [2]) because the random variable $x_ 1,\dots,x_ {N_ e}$ is treated as distinguishable although the electrons are indistinguishable. It is easy to show that
-$$\rho(x,x')=\rho(x)\rho(x')-\sum_ {k,l}\psi_ k^*(x)\psi_ l^*(x')\psi_ l(x)\psi_ k(x'),$$
+$$\rho(x,x')=\rho(x)\rho(x')-\sum_ {k,l}\psi_ k^* (x)\psi_ l^* (x')\psi_ l(x)\psi_ k(x'),$$
 where $\rho(x)=\sum_ k|\psi_ k(x)|^2$ is the electron density. An interference term appears, which is a result of the Pauli-exclusion principle. It implies that some correlation has been included in the HF method due to the antisymmetry, and is termed "Fermi correlation".
 
 However, due to the mean field nature of HF methods, the instant Coulomb repulsion is not properly dealt with. Therefore, the correlation caused by Coulomb repulsion (Coulomb correlation) is not included in the HF methods. In literature, the term "correlation energy" often refers to the correlation energy not included in the HF method, i.e., the difference between energy of mean-field method and the exact energy.
@@ -70,11 +70,23 @@ However, the total wave function is not an eigen state of the total spin operato
 $$\rho(\boldsymbol{r},\boldsymbol{r}',\sigma\neq \sigma')=\rho(\boldsymbol{r},\sigma)\rho(\boldsymbol{r}',\sigma'),$$
 i.e., there is no correlation between electrons with anti-parallel spins, or correlation only exits within electrons with the same spin. It is actually the Pauli exclusion principle.
 
-In addition to UHF, there is also restricted HF (RHF) method, where $N_ A=N_ B$ is imposed. Furthermore, the space parts of spin-up state and spin-down state are chosen to be the same. More explicitly, we have $\psi_ {i}=\phi_ i\alpha$ with $i=1,\dots,N/2$ and $\psi_ i=\phi_ {i-N/2}\beta$ with $i=N/2+1,\dots,N$.
+In addition to UHF, there is also restricted HF (RHF) method, where $N_ A=N_ B$ is imposed. Furthermore, the space parts of spin-up state and spin-down state are chosen to be the same. More explicitly, we have $\psi_ {i}=\phi_ i\alpha$ with $i=1,\dots,N_ e/2$ and $\psi_ i=\phi_ {i-N_ e/2}\beta$ with $i=N_ e/2+1,\dots,N_ e$.
 RHF can only be used for systems with even number of electrons, and there is no spin-contamination. In a rough sense, it is convenient to interpret the electron configuration as electrons of different spins filling into fixed spacial orbits (molecular orbitals, MO). If all MOs are doubly occupied or empty, the configuration is called closed-shell, where RHF methods can be used. Otherwise the configuration is called open-shell, where UHF has to be used, or another restricted open-shell HF (ROHF) method can be applied.
 
-Finally, we quote the total energy of RHF method here [2]:
-$$E=2\sum_ {i=1}^{N_ e/2}\epsilon_ i-\sum_ {i,j}^{N_ e/2}\left(2\langle\phi_ i\phi_ j|\frac{1}{r}|\phi_ i\phi_ j\rangle - \langle\phi_ i\phi_ j|\frac{1}{r}|\phi_ j\phi_ i\rangle \right).$$
+As a summary, I will quote the form of wave function ansatz of different forms of HF here. GHF methods introduce $N_ e$ spin-orbitals for $N_ e$ electrons, with each spin orbital:
+$$\psi_ i(x)=\phi^{\alpha}_ i(\boldsymbol{r})\alpha(\sigma) + \phi^{\beta}_ i(\boldsymbol{r})\beta(\sigma),\; i=1,\dots,N_ e$$
+where $2N_ e$ functions (spacial orbitals) are considered (if written in a vector):
+$$\boldsymbol{\phi}^{\alpha} = (\phi_ 1^{\alpha},\dots,\phi_ {N_ e}^{\alpha}),$$
+$$\boldsymbol{\phi}^{\beta} = (\phi_ 1^{\beta},\dots,\phi_ {N_ e}^{\beta}).$$
+In UHF, the following restriction is imposed on the $2N$ spacial orbitals [1]: ($N_ \alpha \leq N_ e$)
+$$\boldsymbol{\phi}^{\alpha}=(\phi_ 1, \dots, \phi_ {N _ \alpha}, 0,\dots, 0),$$
+$$\boldsymbol{\phi}^{\beta}=(0,\dots,0,\phi_ {N_ {\alpha}+1}, \dots, \phi_ {N_ e}).$$
+In RHF, the following restriction is imposed [1]:
+$$\boldsymbol{\phi}^{\alpha}=(\phi_ 1, \dots, \phi_ {N_ e/2}, 0,\dots, 0),$$
+$$\boldsymbol{\phi}^{\beta}=(0,\dots,0,\phi_ {N_ e/2 + 1}, \dots, \phi_ {N_ e}).$$
+
+<!-- Finally, we quote the total energy of RHF method here [2]:
+$$E=2\sum_ {i=1}^{N_ e/2}\epsilon_ i-\sum_ {i,j}^{N_ e/2}\left(2\langle\phi_ i\phi_ j|\frac{1}{r}|\phi_ i\phi_ j\rangle - \langle\phi_ i\phi_ j|\frac{1}{r}|\phi_ j\phi_ i\rangle \right).$$ -->
 
 ## 2.4. Solving the HF equations
 ### 2.4.1. Self-consistent field (SCF) calculation
@@ -117,9 +129,18 @@ The FCI method depends on the basis set approximation. If $M$ basis functions ar
 $$\Psi_ {CI}=\Psi_ 0\left(1+\sum_ {m=1}^{n}\hat{C}_ m\right)\Psi_ 0,$$
 where $\Psi_ 0$ is the HF wave function (the "ground state"), and $\hat{C}_ m$ is the m-electron excitation operator, which essentially means the linear combination of all possible ways of exciting m electrons to excited states:
 $$\hat{C}_ m=\frac{1}{(m!)^2}\sum_ {\underbrace{i,j,k,\dots}_ {m\;\text{index}}}^{N_ e}\;\sum_ {a,b,c,\dots}^{N_ v} a_ {i,j,k,\dots}^{a,b,c,\dots} \hat{c}_ a^{\dagger}\hat{c}_ b^{\dagger}\dots \hat{c}_ k\hat{c}_ j\hat{c}_ i,$$
-where the $a$'s are undertermined scaler coefficients, and the $\hat{c}^{\dagger}$'s and $\hat{c}$'s are creation and annihilation operators in the second quantization formalism.
+where the $a$'s are undertermined scaler coefficients, and the $\hat{c}^{\dagger}$'s and $\hat{c}$'s are creation and annihilation operators in the second quantization formalism. More concretely, in the CI wave function, each excited term corresponds to a determinant similar to the one in HF, but some orbitals in the determinant are replaced by excited orbitals unonccupied in the original HF calculation.
 
-The conbination coefficients are determined through the variational principle. Like the HF method, the variational principle finally leads to an eigen alue problem. When $n=N_ e$, i.e., when all possible excitations are included in the CI trial wave function, the method is termed the full configurational interaction (FCI) method. FCI calculation gives an exact solution within the subspace spanned by the HF orbits. This is termed the Full-CI limit. If, as an ideal case, the Hartree-Fock limit (complete basis set) and the Full-CI limit are both reached, we get a *precise* solution under the non-relativisitc and BO aprroximation (Hartree-Fock method page on Wikipedia). Note that, the complete space of FCI is exponentially, or even factorially large. This is why quantum chemistry is so difficult!
+The conbination coefficients are determined through the variational principle. Like the HF method, the variational principle finally leads to an eigen value problem. When $n=N_ e$, i.e., when all possible excitations are included in the CI trial wave function, the method is termed the full configurational interaction (FCI) method. FCI calculation gives an exact solution within the subspace spanned by the HF orbits. This is termed the Full-CI limit. If, as an ideal case, the Hartree-Fock limit (complete basis set) and the Full-CI limit are both reached, we get a *precise* solution under the non-relativisitc and BO aprroximation (Hartree-Fock method page on Wikipedia). However, to reach the FCI limit, one has to consider $\binom{M}{N_ e}$ determinants. That is at least exponentially large. This is why quantum chemistry is so difficult!
+
+## Tratable simplifications to FCI
+Several simplifications are introduced into the FCI methods to make the problem tractable. As is clearly explained in the presentation slide [4], one has to seperately consider the situation of weak correlation and strong correlation.
+
+In the weak correlation region, the coefficient of the original HF determinant dominates in the FCI wave function. This leading to the single reference wave methods, where the HF determinant is treated as a "reference" wave function, and some corrections are added to include the correlations. The most Naive method is to truncate the FCI wave function to retain only single (S) and double (D) excitations, i.e., CISD. However, CI methods do not satisfy the size-consistency property [4] ($E(A+B)=E(A)+E(B)$ for non-interacting subsystems $A$ and $B$), so other methods are motivated. One notable method is the coupled cluster method, where the wave function ansatz is different from FCI:
+$$\Psi_ {CC} = e^{T} \Psi_ {HF},$$
+where $T$ is the sum of all possible excitation operators similar to the FCI wave function. The CC wave function can  in theory reach the FCI limit if not truncated, and can also be truncated (e.g., CCSD). The CC method can be starightforwardly implemented on a quantum computer.
+
+In the strong correlation region, the HF term no longer dominates, and one have to use "multiple reference wave functions". I will not introduce these multiple reference methods here.
 
 # 4. Summary
 In Hartree Fock method, a single slater determinant is used as the wave function ansatz, which results in the mean-field HF equations, where some correlations are omitted. The HF equations are converted to a matrix eigen value problem if expaned on a set of discrete basis. To retrieve the correlation energy, different "excited states" are used to form more slater determinants, leading to post-HF method and the FCI limit.
@@ -131,3 +152,5 @@ In Hartree Fock method, a single slater determinant is used as the wave function
 [2] P. Echenique and J. L. Alonso, A Mathematical and Computational Review of Hartree-Fock SCF Methods in Quantum Chemistry, Molecular Physics 105, 3057 (2007).
 
 [3] "Hartree-Fock method" page and "electron correlation" page on Wikipedia.
+
+[4] J. Toulouse, [Review of the Major Families of Electronic-Structure Computational Methods in Quantum Chemistry](https://www.lct.jussieu.fr/pagesperso/toulouse/presentations/review_qc_17.pdf).
