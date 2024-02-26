@@ -72,6 +72,6 @@ However, the exchange-correlation functional $E_ {xc}[n]$ cannot be directly cal
 # 4. Reference
 [1] Y. Shikano, H. C. Watanabe, K. M. Nakanishi, and Y. Ohnishi, Post-Hartree–Fock Method in Quantum Chemistry for Quantum Computer, Eur. Phys. J. Spec. Top. 230, 1037 (2021).
 
-[2] Slides of the presentation by J. Toulouse, [Review of the Major Families of Electronic-Structure Computational Methods in Quantum Chemistry](https://www.lct.jussieu.fr/pagesperso/toulouse/presentations/review_ qc_ 17.pdf).
+[2] Slides of the presentation by J. Toulouse, [Review of the Major Families of Electronic-Structure Computational Methods in Quantum Chemistry](https://www.lct.jussieu.fr/pagesperso/toulouse/presentations/review_qc_17.pdf).
 
 [3] R. O. Jones, Density Functional Theory: Its Origins, Rise to Prominence, and Future, Rev. Mod. Phys. 87, 897 (2015).
