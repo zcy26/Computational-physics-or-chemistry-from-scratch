@@ -55,7 +55,7 @@ Some other methods may be called the "projector method". It is based on the fact
 $$e^{-\tau (\hat{H}-V_ 0)}(\psi|_ {\tau=0}) \xrightarrow{\tau\to\infty} \psi_ {g.s.}.$$
 
 ## 3.2. Desntiy Functional Theory
-Density functional theory, in contrast to the wave function methods, focus on the electron density of the system. I will not include DFT in this repo, and I will only roughly introduce its idea here. The history and details are reviewed in reference [3]. 
+Density functional theory, in contrast to the wave function methods, focus on the electron density of the system. I will not include DFT in this repo, so I will only roughly introduce its idea here. The history and details are reviewed in reference [3]. 
 
 The electron density is defined as the integral of the many-body electron wave function $\psi(\boldsymbol{r}_ 1,\dots,\boldsymbol{r}_ N)$ (spin coordinates are omitted for simplicity):
 $$n(\boldsymbol{r})\equiv N \int \mathrm{d}\boldsymbol{r}_ 2 \dots\mathrm{d}\boldsymbol{r}_ N |\Psi(\boldsymbol{r},\boldsymbol{r}_ 2,\dots,\boldsymbol{r}_ N)|^2.$$
