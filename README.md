@@ -51,7 +51,7 @@ $$E=\frac{\langle \tilde{\psi}|H|\tilde{\psi}\rangle}{\langle \tilde{\psi}|\tild
 Thus, one may try to find a subspace of the Hilbert space (i.e., proposing an ansatz of wave function), and try to minimize the energy integral in that subspace, then a good approximation of the ground state energy and wave function will hopefully been found.
 It can also be extended to excited states through, e.g., imposing orthogonality conditions.
 
-Some other methods may be called the "projector method". It is based on the fact that, the imaginary-time evolution operator $e^{-\tau (\hat{H}-V_ 0)}$ ($V_ 0$ is fix a constant shift of energy) approaches the projection operator onto the ground state, as $\tau\to \infty$. One can thus simulate the imaginary-time evolution of some initial wave function $e^{-\tau (\hat{H}-V_ 0)}\psi_ 0$, and the ground state will hopefully be "filtered out": 
+Some other methods may be called "projector methods". They are based on the following fact: the imaginary-time evolution operator $e^{-\tau (\hat{H}-V_ 0)}$ ($V_ 0$ is a shift of energy) approaches the projection operator onto the ground state, as $\tau\to \infty$. One can thus simulate the imaginary-time evolution of some initial wave function $e^{-\tau (\hat{H}-V_ 0)}\psi_ 0$, and the ground state will hopefully be "filtered out": 
 $$e^{-\tau (\hat{H}-V_ 0)}(\psi|_ {\tau=0}) \xrightarrow{\tau\to\infty} \psi_ {g.s.}.$$
 
 ## 3.2. Desntiy Functional Theory
